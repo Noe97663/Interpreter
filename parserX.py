@@ -24,12 +24,17 @@ INPUTS a BLOCK and parses it into a list of STATEMENTS. In the order they appear
 If a block is nested, recurse. We should end up with a list of statements, or a list of lists of statements.
 """
 def parse_block_to_statements(block, debug=False):
+    block = block[1:-1]
     retval = []
     statement = ""
+    count = 0
     for char in block:
+        if char == "{":
+            count += 1
+        elif char == "}":
+            count -= 1
         statement += char
-        if char == "?":
-            statement = statement.strip()
+        if char == "?" and count == 0:
             retval.append(statement)
             statement = ""
     return retval

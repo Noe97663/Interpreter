@@ -8,4 +8,6 @@ input_file.close()
 print(input_string)
 
 output = parserX.parse_string_to_blocks(input_string, debug=True)
-print(output)
+for block in output:
+    temp = parserX.parse_block_to_statements(block, debug=True)
+    print(temp)
