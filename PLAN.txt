@@ -10,9 +10,9 @@ parse_block_to_statements(block): INPUTS a BLOCK and parses it into a list of ST
                                     If a block is nested, recurse. We should end up with a list of statements, or a list of lists of statements. (potentially queue)
 parse_statement_to_type(statement): INPUTS a single STATEMENT, and return the type as a STRING.
                                     Valid types of statements are: "<var_assign>", "<if_statement>", "<while_statement>", "<print_statement>".
-                                    Perform error checking HERE (using helpers once the type is detected). CHECK IF ALL THE CHARACTERS ARE LEGAL
-                                    ONLY 0-9, a-Z is supported so far.
+                                    EDIT: NO ERROR CHECKING HERE.
                                     A statement can be a block (a list of statements), but we don't handle it here. This is only for single statements.
+
 expr.py:
 parse_expr_to_type(expr): INPUTS a single EXPR, and return the type as a STRING.
                                     Valid types of expr are: "<val>", <math_expr>, <comp_expr>.
