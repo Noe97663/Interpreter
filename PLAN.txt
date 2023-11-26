@@ -1,0 +1,26 @@
+TYPES:
+value: value.type is a string indicating the type. Valid types are <int> <bool> <str_literal>. value.value is the actual value.
+variable: variable.name is a string indicating the name of the variable. variable.value is a value type.
+
+
+parser.py:
+parse_string_to_blocks(string): INPUTS a LONG string of text and parses it into a list of BLOCKS each block starting with { and ending with }. The blocks can be nested. 
+                                    DELETES UNNECESSARY SPACES and NEW LINES.
+parse_block_to_statements(block): INPUTS a BLOCK and parses it into a list of STATEMENTS. In the order they appear in the block. Each statement should end with a ?.
+                                    If a block is nested, recurse. We should end up with a list of statements, or a list of lists of statements. (potentially queue)
+parse_statement_to_type(statement): INPUTS a single STATEMENT, and return the type as a STRING.
+                                    Valid types of statements are: "<var_assign>", "<if_statement>", "<while_statement>", "<print_statement>".
+                                    Perform error checking HERE (using helpers once the type is detected). CHECK IF ALL THE CHARACTERS ARE LEGAL
+                                    ONLY 0-9, a-Z is supported so far.
+                                    A statement can be a block (a list of statements), but we don't handle it here. This is only for single statements.
+expr.py:
+parse_expr_to_type(expr): INPUTS a single EXPR, and return the type as a STRING.
+                                    Valid types of expr are: "<val>", <math_expr>, <comp_expr>.
+parse_var_to_lookup(expr): INPUTS a single EXPR, and returns a list of variables to look up. Eg. {x + y} should return [x, y].
+exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of variables. Return the value of that expression as a VARIABLE type. Perform error checking here.
+                                    Check if a variable is not defined. Check if a variable is not of the right type. Check if the types are right.
+                                    This is only for when we run in interpreter mode.
+convert_to_python(expr): INPUTS an EXPR, and returns a string of python code that will evaluate the expression. This is for when we run in compiler mode.
+                                    This is for when we run in compiler mode.
+
+compiler.py:
