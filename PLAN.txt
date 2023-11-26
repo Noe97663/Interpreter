@@ -23,4 +23,19 @@ exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of variables. Ret
 convert_to_python(expr): INPUTS an EXPR, and returns a string of python code that will evaluate the expression. This is for when we run in compiler mode.
                                     This is for when we run in compiler mode.
 
-compiler.py:
+statement.py:
+exec_statement(statement, lookup_dict): INPUTS a single STATEMENT. EXECUTES the STATEMENT. Returns a dict of variables that were changed.
+                                    This is for when we run in interpreter mode.
+convert_to_python(statement): INPUTS a single STATEMENT. Returns a string of python code that will execute the statement.
+
+translate.py:
+--interpreter --> run in interpreter mode.
+--compile --> run in compiler mode. Expect a file name as the next argument.
+
+interpreter.py:
+main(): make user type "{" to begin the first block. Then run line by line.
+
+translator.py:
+print().
+
+
