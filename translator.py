@@ -15,7 +15,7 @@ SCOPE_DICT = {0:[]}
 VAR_DICT = {}
 
 def parse_math_expr(expr, scope_name):
-    #check the current scope by peeking the SCOPE_STACK, empty means global
+    #check the current scope by peeking the SCOPE_STACK, empty means global = 0
 
     # you can check if variable names are defined in the scope_name
 
