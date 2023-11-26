@@ -28,14 +28,14 @@ exec_statement(statement, lookup_dict): INPUTS a single STATEMENT. EXECUTES the 
                                     This is for when we run in interpreter mode.
 convert_to_python(statement): INPUTS a single STATEMENT. Returns a string of python code that will execute the statement.
 
-translate.py:
+translator.py:
 --interpreter --> run in interpreter mode.
 --compile --> run in compiler mode. Expect a file name as the next argument.
 
 interpreter.py:
 main(): make user type "{" to begin the first block. Then run line by line.
 
-translator.py:
+translate.py:
 print().
 
 
