@@ -1,9 +1,8 @@
 import sys
 from parserX import *
 #from expr import *
-
 global DEBUG
-DEBUG = True
+DEBUG = False
 
 def convert_to_python_expr(expr):
     return "<expr>"
@@ -91,6 +90,9 @@ def convert_if_statement(if_statement, indent):
 if ( <expr> ) <block> <else_clause>? | if (<expr>) <block>?
 """
 def parse_if_statement(if_statement):
+    if_statement = if_statement.strip()
+    if(if_statement_err_checking(if_statement) == False):
+        sys.exit()
     # parse the if statement into its components
     expr_start = if_statement.find("(")
     expr_end = if_statement.find(")")
@@ -112,7 +114,7 @@ def parse_if_statement(if_statement):
     if_statement2 = if_statement[cur+1:]
     else_block = ""
     if "else" in if_statement2:
-        count = 1
+        count = 0
         cur = if_statement2.find("{")
         for char in if_statement2[if_statement2.find("{"):]:
             if char == "{":
@@ -123,6 +125,7 @@ def parse_if_statement(if_statement):
             cur += 1
             if count == 0:
                 break
+
     return expr, if_block, else_block
 
 def exec_while_statement(while_statement, lookup_dict):
@@ -155,6 +158,9 @@ def convert_while_statement(while_statement, indent):
 <while_statement> ::= while ( <expr> ) <block>
 """
 def parse_while_statement(while_statement, DEBUG=False):
+    while_statement = while_statement.strip()
+    if (while_statement_err_checking(while_statement) == False):
+        sys.exit()
     # parse the while statement into its components
     expr_start = while_statement.find("(")
     expr_end = while_statement.find(")")
@@ -175,6 +181,9 @@ def parse_while_statement(while_statement, DEBUG=False):
     return expr, block
 
 def exec_print_statement(print_statement, lookup_dict):
+    print_statement = print_statement.strip()
+    if (print_statement_err_checking(print_statement) == False):
+        sys.exit()
     print_statement = print_statement[1:-1]
     # determine if the print statement is a string literal or a variable name
     if print_statement[0] == "\"":
@@ -187,6 +196,9 @@ def exec_print_statement(print_statement, lookup_dict):
     return None
 
 def convert_print_statement(print_statement, indent):
+    print_statement = print_statement.strip()
+    if (print_statement_err_checking(print_statement) == False):
+        sys.exit()
     python_code = ""
     print_statement = print_statement[1:-1]
     python_code += " "*indent + "print(" + print_statement + ")\n"
@@ -216,6 +228,9 @@ def convert_var_assign(var_assign, indent):
     return python_code
 
 def parse_var_assign(var_assign):
+    var_assign = var_assign.strip()
+    if (var_assign_err_checking(var_assign) == False):
+        sys.exit()
     # parse the variable assignment into its components
     left = var_assign[:var_assign.find("=")]
     left = left.split()
