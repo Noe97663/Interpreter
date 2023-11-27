@@ -26,10 +26,16 @@ This assumes that block starts with { and ends with }.
 """
 def parse_block_to_statements(block, debug=False):
     block = block[1:-1]
+    block = block[1:-1]
     retval = []
     statement = ""
     count = 0
+    count = 0
     for char in block:
+        if char == "{":
+            count += 1
+        elif char == "}":
+            count -= 1
         if char == "{":
             count += 1
         elif char == "}":

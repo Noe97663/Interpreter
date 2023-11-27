@@ -1,4 +1,6 @@
 # Interpreter
+
+reserved keywords - true, false
 CSC 372 Project 2
 
 These are the basic features that the Interpreter handles: 
