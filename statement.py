@@ -5,32 +5,47 @@ from expr import *
 global DEBUG
 DEBUG = True
 
+def convert_to_python_expr(expr):
+    return "<expr>"
+
 def exec_statement(statement, lookup_dict):
-    pass
-    # check if statement is an if statement
-    if "if" in statement:
-        # execute the if statement
+    statement_type = parse_statement_to_type(statement)
+    if statement_type == "<if_statement>":
         exec_if_statement(statement, lookup_dict)
-    # check if statement is a while statement
-    elif "while" in statement:
-        # execute the while statement
+    elif statement_type == "<while_statement>":
         exec_while_statement(statement, lookup_dict)
-    # check if statement is a print statement
-    elif "!" in statement:
-        # execute the print statement
+    elif statement_type == "<print_statement>":
         exec_print_statement(statement, lookup_dict)
-    # default to variable assignment
-    else:
-        # execute the variable assignment
+    elif statement_type == "<var_assign>":
         exec_var_assign(statement, lookup_dict)
+    else:
+        print("ERROR: unknown statement type")
+        print(statement)
+        sys.exit()
+
+def convert_to_python(statement, indent=0):
+    statement_type = parse_statement_to_type(statement)
+    if statement_type == "<if_statement>":
+        return convert_if_statement(statement, indent)
+    elif statement_type == "<while_statement>":
+        return convert_while_statement(statement, indent)
+    elif statement_type == "<print_statement>":
+        return convert_print_statement(statement, indent)
+    elif statement_type == "<var_assign>":
+        return convert_var_assign(statement, indent)
+    else:
+        print("ERROR: unknown statement type")
+        print(statement)
+        sys.exit()
+
     
 def exec_if_statement(if_statement, lookup_dict):
     # parse the if statement into its components
     expr, if_block, else_block = parse_if_statement(if_statement)
     # evaluate the expression
     result = exec_expr(expr, lookup_dict)
-    if result.type == "bool":
-        if result.value == "true":
+    if result.type == "<bool>":
+        if result.value == True:
             # execute the if block
             to_exec = parse_block_to_statements(if_block)
             for statement in to_exec:
@@ -42,6 +57,28 @@ def exec_if_statement(if_statement, lookup_dict):
             to_exec = parse_block_to_statements(else_block)
             for statement in to_exec:
                 exec_statement(statement, lookup_dict)
+
+def convert_if_statement(if_statement, indent):
+    # parse the if statement into its components
+    python_code = ""
+    expr, if_block, else_block = parse_if_statement(if_statement)
+    expr_py = convert_to_python_expr(expr)
+    python_code += " "*indent + "if " + expr_py + ":\n"
+    # convert the if block
+    to_convert = parse_block_to_statements(if_block)
+    for statement in to_convert:
+        python_code += convert_to_python(statement, indent+4)
+    # convert the else block
+    if else_block is None:
+        return python_code
+    else:
+        python_code += " "*indent + "else:\n"
+        to_convert = parse_block_to_statements(else_block)
+        for statement in to_convert:
+            python_code += convert_to_python(statement, indent+4)
+        return python_code
+
+
 """
 if ( <expr> ) <block> <else_clause>? | if (<expr>) <block>?
 """
@@ -89,12 +126,22 @@ def parse_if_statement(if_statement):
 def exec_while_statement(while_statement, lookup_dict):
     expr, block = parse_while_statement(while_statement)
     result = exec_expr(expr, lookup_dict)
-    if result.type == "bool":
-        if result.value == "true":
+    if result.type == "<bool>":
+        if result.value == True:
             to_exec = parse_block_to_statements(block)
             for statement in to_exec:
                 exec_statement(statement, lookup_dict)
             exec_while_statement(while_statement, lookup_dict)
+
+def convert_while_statement(while_statement, indent):
+    python_code = ""
+    expr, block = parse_while_statement(while_statement)
+    expr_py = convert_to_python_expr(expr)
+    python_code += " "*indent + "while " + expr_py + ":\n"
+    to_convert = parse_block_to_statements(block)
+    for statement in to_convert:
+        python_code += convert_to_python(statement, indent+4)
+    return python_code
 
 """
 <while_statement> ::= while ( <expr> ) <block>
@@ -137,6 +184,12 @@ def exec_print_statement(print_statement, lookup_dict):
         print(lookup_dict[print_statement])
     return None
 
+def convert_print_statement(print_statement, indent):
+    python_code = ""
+    print_statement = print_statement[1:-1]
+    python_code += " "*indent + "print(" + print_statement + ")\n"
+    return python_code
+
 def exec_var_assign(var_assign, lookup_dict):
     # parse the variable assignment into its components
     var_name, expr = parse_var_assign(var_assign)
@@ -145,6 +198,13 @@ def exec_var_assign(var_assign, lookup_dict):
     # assign the variable
     lookup_dict[var_name] = result
     return None
+
+def convert_var_assign(var_assign, indent):
+    python_code = ""
+    var_name, expr = parse_var_assign(var_assign)
+    expr_py = convert_to_python_expr(expr)
+    python_code += " "*indent + var_name + " = " + expr_py + "\n"
+    return python_code
 
 def parse_var_assign(var_assign, DEBUG=False):
     # parse the variable assignment into its components
