@@ -1,6 +1,6 @@
 import sys
 from parserX import *
-from expr import *
+#from expr import *
 
 global DEBUG
 DEBUG = True
@@ -62,6 +62,14 @@ def convert_if_statement(if_statement, indent):
     # parse the if statement into its components
     python_code = ""
     expr, if_block, else_block = parse_if_statement(if_statement)
+    if (DEBUG):
+        print(" "*indent + "Parsing if statement:")
+        print(" "*indent + "if_statement: " + if_statement)
+        print(" "*indent + "expr: " + expr)
+        print(" "*indent + "if_block: " + if_block)
+        print(" "*indent + "else_block: " + else_block)
+        print()
+    
     expr_py = convert_to_python_expr(expr)
     python_code += " "*indent + "if " + expr_py + ":\n"
     # convert the if block
@@ -69,7 +77,7 @@ def convert_if_statement(if_statement, indent):
     for statement in to_convert:
         python_code += convert_to_python(statement, indent+4)
     # convert the else block
-    if else_block is None:
+    if else_block.strip() == "":
         return python_code
     else:
         python_code += " "*indent + "else:\n"
@@ -101,12 +109,12 @@ def parse_if_statement(if_statement):
         if count == 0:
             break
 
-    if_statement = if_statement[cur+1:]
+    if_statement2 = if_statement[cur+1:]
     else_block = ""
-    if "else" in if_statement:
+    if "else" in if_statement2:
         count = 1
-        cur = if_statement.find("{")
-        for char in if_statement[if_statement.find("{"):]:
+        cur = if_statement2.find("{")
+        for char in if_statement2[if_statement2.find("{"):]:
             if char == "{":
                 count += 1
             elif char == "}":
@@ -115,12 +123,6 @@ def parse_if_statement(if_statement):
             cur += 1
             if count == 0:
                 break
-    if (DEBUG):
-        print("Parsing if statement:")
-        print("if_statement: " + if_statement)
-        print("expr: " + expr)
-        print("if_block: " + if_block)
-        print("else_block: " + else_block)
     return expr, if_block, else_block
 
 def exec_while_statement(while_statement, lookup_dict):
@@ -136,6 +138,12 @@ def exec_while_statement(while_statement, lookup_dict):
 def convert_while_statement(while_statement, indent):
     python_code = ""
     expr, block = parse_while_statement(while_statement)
+    if (DEBUG):
+        print(" "*indent + "Parsing while statement:")
+        print(" "*indent + "while_statement: " + while_statement)
+        print(" "*indent + "expr: " + expr)
+        print(" "*indent + "block: " + block)
+        print()
     expr_py = convert_to_python_expr(expr)
     python_code += " "*indent + "while " + expr_py + ":\n"
     to_convert = parse_block_to_statements(block)
@@ -164,12 +172,6 @@ def parse_while_statement(while_statement, DEBUG=False):
         cur += 1
         if count == 0:
             break
-
-    if (DEBUG):
-        print("Parsing while statement:")
-        print("while_statement: " + while_statement)
-        print("expr: " + expr)
-        print("block: " + block)
     return expr, block
 
 def exec_print_statement(print_statement, lookup_dict):
@@ -192,7 +194,7 @@ def convert_print_statement(print_statement, indent):
 
 def exec_var_assign(var_assign, lookup_dict):
     # parse the variable assignment into its components
-    var_name, expr = parse_var_assign(var_assign)
+    type_name, var_name, expr = parse_var_assign(var_assign)
     # evaluate the expression
     result = exec_expr(expr, lookup_dict)
     # assign the variable
@@ -201,21 +203,26 @@ def exec_var_assign(var_assign, lookup_dict):
 
 def convert_var_assign(var_assign, indent):
     python_code = ""
-    var_name, expr = parse_var_assign(var_assign)
+    type_name, var_name, expr = parse_var_assign(var_assign)
+    if (DEBUG):
+        print(" "*indent + "Parsing variable assignment:")
+        print(" "*indent + "var_assign: " + var_assign)
+        print(" "*indent + "type_name: " + type_name)
+        print(" "*indent + "var_name: " + var_name)
+        print(" "*indent + "expr: " + expr)
+        print()
     expr_py = convert_to_python_expr(expr)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
     return python_code
 
-def parse_var_assign(var_assign, DEBUG=False):
+def parse_var_assign(var_assign):
     # parse the variable assignment into its components
-    var_name = var_assign[:var_assign.find("=")]
+    left = var_assign[:var_assign.find("=")]
+    left = left.split()
+    type_name = left[0]
+    var_name = left[1]
     expr = var_assign[var_assign.find("=")+1:-1]
-    if (DEBUG):
-        print("Parsing variable assignment:")
-        print("var_assign: " + var_assign)
-        print("var_name: " + var_name)
-        print("expr: " + expr)
-    return var_name, expr
+    return type_name, var_name, expr
 
 
 
