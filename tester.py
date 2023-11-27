@@ -22,6 +22,5 @@ for block in output:
     for statement in temp:
         python += convert_to_python(statement)
     
-    print()
     print("Python statements:")
     print(python)
