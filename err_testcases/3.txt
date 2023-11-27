@@ -1,0 +1,5 @@
+{
+    int y = 2?
+    int z = "hello"?
+    int a= True?
+}

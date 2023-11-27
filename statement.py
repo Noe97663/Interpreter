@@ -15,8 +15,7 @@ def exec_statement(statement, lookup_dict):
     elif statement_type == "<var_assign>":
         exec_var_assign(statement, lookup_dict)
     else:
-        print("ERROR: unknown statement type")
-        print("ERROR: " + statement)
+        return
 
 def convert_to_python(statement, lookup_dict, indent=0):
     statement_type = parse_statement_to_type(statement)
@@ -145,7 +144,6 @@ def parse_if_statement(if_statement):
         print("ERROR: mismatched parentheses in if statement")
         return None, None, None
     if expr_start == -1 or expr_end == -1:
-        print("ERROR: missing parentheses around expression")
         return None, None, None
     expr = if_statement[expr_start+1:expr_end]
 
@@ -261,7 +259,6 @@ def parse_while_statement(while_statement):
         print("ERROR: mismatched parentheses in while statement")
         return None, None
     if expr_start == -1 or expr_end == -1:
-        print("ERROR: missing parentheses around expression")
         return None, None
     expr = while_statement[expr_start+1:expr_end]
 
@@ -301,8 +298,15 @@ def convert_print_statement(print_statement, lookup_dict, indent):
         sys.exit()
     python_code = ""
     print_statement = print_statement[1:-1]
-    python_code += " "*indent + "print(" + print_statement + ")\n"
-    return python_code
+    if print_statement[0] == "\"":
+        python_code += " "*indent + "print(" + print_statement + ")\n"
+        return python_code
+    else:
+        if print_statement not in lookup_dict:
+            print("ERROR: variable '" + print_statement + "' not declared")
+            sys.exit()
+        python_code += " "*indent + "print(" + print_statement + ")\n"
+        return python_code
 
 def exec_var_assign(var_assign, lookup_dict):
     var_assign = var_assign.strip()
