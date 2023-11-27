@@ -1,6 +1,19 @@
 from expr import *
 
 
+# TESTS for exec_expr(expr,lookup_dict)
+
+
+
+
+
+
+
+
+
+
+
+# TESTS for parse_var_to_lookup and parse_expr_to_type (+dependent functions)
 expr = "x+3"
 print(parse_var_to_lookup(expr))
 expr = "x>>t"
@@ -27,7 +40,7 @@ expr="asda23s"
 
 #invalid variable name left
 expr = "asdqqex1+3"
-#print(parse_var_to_lookup(expr))
+print(parse_var_to_lookup(expr))
 
 #invalid variable name right
 expr = "asdqqx+asda231s"
