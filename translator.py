@@ -142,7 +142,18 @@ def main():
     args = parser.parse_args()
 
     # Map positional arguments to a dictionary
-    lookup_dict = {f'arg{i}': variable.Value(arg, "<str_literal>") for i, arg in enumerate(args.args)}
+    lookup_dict = {}
+    for i, arg in enumerate(args.args):
+        if arg.isnumeric():
+            lookup_dict[f'arg{i}'] = variable.Value(arg, "int")
+        elif arg == "True":
+            lookup_dict[f'arg{i}'] = variable.Value(True, "bool")
+        elif arg == "False":
+            lookup_dict[f'arg{i}'] = variable.Value(False, "bool")
+        else:
+            lookup_dict[f'arg{i}'] = variable.Value(arg, "str_literal")
+
+
 
     DEBUG = args.debug
     statement.DEBUG = args.debug
