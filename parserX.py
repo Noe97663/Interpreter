@@ -2,6 +2,9 @@
 INPUTS a LONG string of text and parses it into a list of BLOCKS each block starting with { and ending with }. The blocks can be nested. 
 DELETES UNNECESSARY SPACES and NEW LINES.
 """
+import sys
+
+
 def parse_string_to_blocks(string, debug=False):
     string = string.replace("\n", "")
     ' '.join(string.split())
@@ -26,16 +29,10 @@ This assumes that block starts with { and ends with }.
 """
 def parse_block_to_statements(block, debug=False):
     block = block[1:-1]
-    block = block[1:-1]
     retval = []
     statement = ""
     count = 0
-    count = 0
     for char in block:
-        if char == "{":
-            count += 1
-        elif char == "}":
-            count -= 1
         if char == "{":
             count += 1
         elif char == "}":
@@ -45,6 +42,14 @@ def parse_block_to_statements(block, debug=False):
             statement = statement.strip()
             retval.append(statement)
             statement = ""
+    if statement != "":
+        print("ERROR: statement does not end with '?'")
+        print(statement)
+        sys.exit(1)
+    if count != 0:
+        print("ERROR: incorrect number of '{' or '}' in block")
+        print(block)
+        sys.exit(1)
     return retval
 
 """
