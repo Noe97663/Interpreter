@@ -326,7 +326,7 @@ def exec_expr(expr,lookup_dict):
                 sys.exit(0)
         ret_val = operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],False)
         if type(ret_val)==str:
-            return Value(ret_val.strip("\""),"str_literal")
+            return Value(ret_val,"str_literal")
         elif type(ret_val)==bool:
             return Value(ret_val,"bool")
         #assuming int
@@ -396,7 +396,7 @@ def convert_to_python(expr):
                 sys.exit(0)
         ret_val = operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],False)
         if type(ret_val)==str:
-            return Value(ret_val.strip("\""),"str_literal")
+            return Value(ret_val,"str_literal")
         elif type(ret_val)==bool:
             return Value(ret_val,"bool")
         #assuming int
