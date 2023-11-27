@@ -18,16 +18,16 @@ def exec_statement(statement, lookup_dict):
         print("ERROR: unknown statement type")
         print(statement)
 
-def convert_to_python(statement, indent=0):
+def convert_to_python(statement, lookup_dict, indent=0):
     statement_type = parse_statement_to_type(statement)
     if statement_type == "<if_statement>":
-        return convert_if_statement(statement, indent)
+        return convert_if_statement(statement, lookup_dict, indent)
     elif statement_type == "<while_statement>":
-        return convert_while_statement(statement, indent)
+        return convert_while_statement(statement, lookup_dict, indent)
     elif statement_type == "<print_statement>":
-        return convert_print_statement(statement, indent)
+        return convert_print_statement(statement, lookup_dict, indent)
     elif statement_type == "<var_assign>":
-        return convert_var_assign(statement, indent)
+        return convert_var_assign(statement, lookup_dict, indent)
     else:
         print("ERROR: unknown statement type")
         print(statement)
@@ -56,7 +56,7 @@ def exec_if_statement(if_statement, lookup_dict):
             for statement in to_exec:
                 exec_statement(statement, lookup_dict)
 
-def convert_if_statement(if_statement, indent):
+def convert_if_statement(if_statement, lookup_dict, indent):
     if_statement = if_statement.strip()
     if(if_statement_err_checking(if_statement) == False):
         sys.exit()
@@ -71,7 +71,7 @@ def convert_if_statement(if_statement, indent):
         print(" "*indent + "else_block: " + else_block)
         print()
     
-    expr_py = expr_module.convert_to_python(expr)
+    expr_py = expr_module.convert_to_python(expr, lookup_dict)
     python_code += " "*indent + "if " + expr_py + ":\n"
     # convert the if block
     to_convert = parse_block_to_statements(if_block)
@@ -140,7 +140,7 @@ def exec_while_statement(while_statement, lookup_dict):
                 exec_statement(statement, lookup_dict)
             exec_while_statement(while_statement, lookup_dict)
 
-def convert_while_statement(while_statement, indent):
+def convert_while_statement(while_statement, lookup_dict, indent):
     while_statement = while_statement.strip()
     if (while_statement_err_checking(while_statement) == False):
         sys.exit()
@@ -152,7 +152,7 @@ def convert_while_statement(while_statement, indent):
         print(" "*indent + "expr: " + expr)
         print(" "*indent + "block: " + block)
         print()
-    expr_py = expr_module.convert_to_python(expr)
+    expr_py = expr_module.convert_to_python(expr, lookup_dict)
     python_code += " "*indent + "while " + expr_py + ":\n"
     to_convert = parse_block_to_statements(block)
     for statement in to_convert:
@@ -162,7 +162,7 @@ def convert_while_statement(while_statement, indent):
 """
 <while_statement> ::= while ( <expr> ) <block>
 """
-def parse_while_statement(while_statement, DEBUG=False):
+def parse_while_statement(while_statement):
     # parse the while statement into its components
     expr_start = while_statement.find("(")
     expr_end = while_statement.find(")")
@@ -197,7 +197,7 @@ def exec_print_statement(print_statement, lookup_dict):
         print(lookup_dict[print_statement])
     return None
 
-def convert_print_statement(print_statement, indent):
+def convert_print_statement(print_statement, lookup_dict, indent):
     print_statement = print_statement.strip()
     if (print_statement_err_checking(print_statement) == False):
         sys.exit()
@@ -218,7 +218,7 @@ def exec_var_assign(var_assign, lookup_dict):
     lookup_dict[var_name] = result
     return None
 
-def convert_var_assign(var_assign, indent):
+def convert_var_assign(var_assign, lookup_dict, indent):
     var_assign = var_assign.strip()
     if (var_assign_err_checking(var_assign) == False):
         sys.exit()
@@ -231,7 +231,7 @@ def convert_var_assign(var_assign, indent):
         print(" "*indent + "var_name: " + var_name)
         print(" "*indent + "expr: " + expr)
         print()
-    expr_py = expr_module.convert_to_python(expr)
+    expr_py = expr_module.convert_to_python(expr, lookup_dict)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
     return python_code
 

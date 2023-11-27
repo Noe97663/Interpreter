@@ -12,15 +12,15 @@ input_file.close()
 print(input_string)
 
 lookup_dict = {'x' : Value(3, "<int>")}
-output = parse_string_to_blocks(input_string, debug=True)
+output = parse_string_to_blocks(input_string)
 for block in output:
-    temp = parse_block_to_statements(block, debug=True)
+    temp = parse_block_to_statements(block)
     print("Statements in block:")
     print(temp)
     print()
     python = ""
     for statement in temp:
-        python += convert_to_python(statement)
+        python += convert_to_python(statement, lookup_dict)
     
     print("Python statements:")
     print(python)
