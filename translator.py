@@ -65,13 +65,17 @@ def run_interpreter(lookup_dict, DEBUG = False):
         if DEBUG:
             print("Successfully opened file '" + initial_input + "'")
             print(len(blocks), "blocks found")
-        print("Running in line by line mode, enter to continue ...")
-        input("")
+        if len(blocks) > 0:
+            print("Running in line by line mode, enter to continue ...")
+            input("")
+        else:
+            print("No blocks found. Are you sure you've correctly formatted your file?")
         to_run = []
         for block in blocks:
             stmts = parserX.parse_block_to_statements(block)
-            for stmt in stmts:
-                to_run.append(stmt)
+            if stmts is not None:
+                for stmt in stmts:
+                    to_run.append(stmt)
         while len(to_run) > 0:
             stmt = to_run.pop(0)
             print(">>" + stmt)

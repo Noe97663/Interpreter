@@ -3,7 +3,7 @@ This function takes in a string and returns a list of blocks.
 """
 def parse_string_to_blocks(string):
     string = string.replace("\n", "")
-    ' '.join(string.split())
+    string = ' '.join(string.split())
     retval = []
     block = ""
     count = 0
@@ -14,7 +14,8 @@ def parse_string_to_blocks(string):
             count -= 1
         block += char
         if count == 0:
-            retval.append(block)
+            if (len(block) > 0 and block[0] == "{"):
+                retval.append(block)
             block = ""
     return retval
 

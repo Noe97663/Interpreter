@@ -57,6 +57,8 @@ def exec_if_statement(if_statement, lookup_dict):
         print("else_block: " + else_block)
     # evaluate the expression
     result = expr_module.exec_expr(expr, lookup_dict)
+    if result is None:
+        return
     if (DEBUG):
         print("expr result: " + str(result))
     if result.type == "bool":
@@ -137,7 +139,13 @@ def parse_if_statement(if_statement):
     # parse the if statement into its components
     expr_start = if_statement.find("(")
     expr_end = if_statement.find(")")
+    expr_start_count = if_statement.count("(")
+    expr_end_count = if_statement.count(")")
+    if expr_start_count != expr_end_count:
+        print("ERROR: mismatched parentheses in if statement")
+        return None, None, None
     if expr_start == -1 or expr_end == -1:
+        print("ERROR: missing parentheses around expression")
         return None, None, None
     expr = if_statement[expr_start+1:expr_end]
 
@@ -194,6 +202,8 @@ def exec_while_statement(while_statement, lookup_dict):
         print("block: " + block)
         print()
     result = expr_module.exec_expr(expr, lookup_dict)
+    if result is None:
+        return None
     if result.type == "bool":
         if result.value == True:
             to_exec = parse_block_to_statements(block)
@@ -245,7 +255,13 @@ def parse_while_statement(while_statement):
     # parse the while statement into its components
     expr_start = while_statement.find("(")
     expr_end = while_statement.find(")")
+    expr_start_count = while_statement.count("(")
+    expr_end_count = while_statement.count(")")
+    if expr_start_count != expr_end_count:
+        print("ERROR: mismatched parentheses in while statement")
+        return None, None
     if expr_start == -1 or expr_end == -1:
+        print("ERROR: missing parentheses around expression")
         return None, None
     expr = while_statement[expr_start+1:expr_end]
 
@@ -302,6 +318,8 @@ def exec_var_assign(var_assign, lookup_dict):
         print("expr: " + expr)
     # evaluate the expression
     result = expr_module.exec_expr(expr, lookup_dict)
+    if result is None:
+        return None
     # assign the variable
     lookup_dict[var_name] = result
     return None
@@ -321,7 +339,10 @@ def convert_var_assign(var_assign, lookup_dict, indent):
         print()
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
-    lookup_dict[var_name] = expr_module.exec_expr(expr,lookup_dict)
+    eval = expr_module.exec_expr(expr, lookup_dict)
+    if eval is None:
+        sys.exit()
+    lookup_dict[var_name] = eval
     return python_code
 
 def parse_var_assign(var_assign):
