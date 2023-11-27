@@ -31,10 +31,8 @@ def val_valid(val):
 A var_name should not have a digit in it, in any circumstance
 """
 def var_valid(var_name):
-    print("checkedfor ", var_name)
     contains_alpha = any(char.isalpha() for char in var_name)
     contains_digit = any(char.isdigit() for char in var_name)
-    print(contains_digit)
     if contains_alpha and contains_digit:
         return False
     return True
@@ -56,7 +54,8 @@ def parse_expr_to_type(expr):
             if type_retval =="":
                 type_retval = "<math_expr>"
             else:
-                type_retval = "ERROR: both types of ops found in ("+expr+")"
+                print("ERROR: both types of ops found in >>"+expr+"<<")
+                sys.exit(1)
     if type_retval=="":
         type_retval = "<val>"
     return type_retval
@@ -101,7 +100,8 @@ def parse_var_to_lookup(expr):
     if expr_type=="<val>":
         #invaid val
         if not(val_valid(expr)):
-            return "ERROR: <val> type contains \" and digits in "+expr
+            print("ERROR: <val> type contains \" and digits in "+expr)
+            sys.exit(0)
         #string_literal
         if expr.find("\"")!=-1:
             if expr[0]=="\"" and expr[-1]=="\"":
@@ -131,7 +131,7 @@ def parse_var_to_lookup(expr):
         lookup += to_add 
     # error case
     else: 
-        return expr_type
+        print("ERROR: Ran into an unknown error with expression: "+expr)
     return lookup
 
 def exec_expr(expr,lookup_dict):
