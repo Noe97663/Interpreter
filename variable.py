@@ -17,4 +17,6 @@ class Value:
         self.value = value
         self.type = type
     def __str__(self):
+        if self.type=="bool":
+            return str(self.value).lower()
         return str(self.value)

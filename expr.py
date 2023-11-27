@@ -519,14 +519,14 @@ def convert_to_python(expr,lookup_dict):
         #invalid val
         if not(val_valid(expr)):
             print("ERROR: <val> type contains invalid combination-of-characters/character(s) in >>"+expr+"<<")
-            sys.exit(0)
+            return None
         #string_literal
         if expr.find("\"")!=-1:
             if expr[0]=="\"" and expr[-1]=="\"":
                 return expr
             else:
                 print("ERROR: string literal not in correct format: "+expr)
-                sys.exit(0)
+                return None
         #int
         if all(char.isdigit() for char in expr):
             return expr
@@ -542,17 +542,17 @@ def convert_to_python(expr,lookup_dict):
                 return expr
             else:
                 print("ERROR:",expr,"has not been defined yet.")
-                sys.exit(0)
+                return None
         else:
             print("ERROR:",expr,"is not a valid variable name.")
-            sys.exit(0)
+            return None
 
     elif expr_type == "<comp_expr>":
         vars = parse_var_to_lookup(expr)
         for var in vars:
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
-                sys.exit(0)
+                return None
         return convert_to_python_operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],True)
         
         
@@ -562,9 +562,9 @@ def convert_to_python(expr,lookup_dict):
         for var in vars:
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
-                sys.exit(0)
+                return None
         return convert_to_python_operator_expr_exec(expr,lookup_dict,["+", "-", "*","/", "%","&&","||"],False)
     # error case
     else: 
         print("ERROR: Ran into an unknown error with expression: "+expr)
-        sys.exit(0)
+        return None

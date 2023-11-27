@@ -5,13 +5,8 @@ from expr import *
 
 
 
-print(type("asd"))
-print(type(123))
-print(type(True))
-print(type("asd")==str)
-print(type(123)==int)
-print(type(True)==bool)
-
+if not None:
+    print("dab")
 
 
 
