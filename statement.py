@@ -328,6 +328,9 @@ def exec_var_assign(var_assign, lookup_dict):
     if (type_name != result.type):
         print("ERROR: variable type does not match expression type")
         return None
+    
+    if (DEBUG):
+        print("expr result: " + str(result))
 
     # assign the variable
     lookup_dict[var_name] = result
