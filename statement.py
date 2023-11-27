@@ -1,11 +1,8 @@
 import sys
 from parserX import *
-#from expr import *
+import expr as expr_module
 global DEBUG
 DEBUG = False
-
-def convert_to_python_expr(expr):
-    return "<expr>"
 
 def exec_statement(statement, lookup_dict):
     statement_type = parse_statement_to_type(statement)
@@ -44,7 +41,7 @@ def exec_if_statement(if_statement, lookup_dict):
     # parse the if statement into its components
     expr, if_block, else_block = parse_if_statement(if_statement)
     # evaluate the expression
-    result = exec_expr(expr, lookup_dict)
+    result = expr_module.exec_expr(expr, lookup_dict)
     if result.type == "<bool>":
         if result.value == True:
             # execute the if block
@@ -74,7 +71,7 @@ def convert_if_statement(if_statement, indent):
         print(" "*indent + "else_block: " + else_block)
         print()
     
-    expr_py = convert_to_python_expr(expr)
+    expr_py = expr_module.convert_to_python(expr)
     python_code += " "*indent + "if " + expr_py + ":\n"
     # convert the if block
     to_convert = parse_block_to_statements(if_block)
@@ -135,7 +132,7 @@ def exec_while_statement(while_statement, lookup_dict):
     if (while_statement_err_checking(while_statement) == False):
         return None
     expr, block = parse_while_statement(while_statement)
-    result = exec_expr(expr, lookup_dict)
+    result = expr_module.exec_expr(expr, lookup_dict)
     if result.type == "<bool>":
         if result.value == True:
             to_exec = parse_block_to_statements(block)
@@ -155,7 +152,7 @@ def convert_while_statement(while_statement, indent):
         print(" "*indent + "expr: " + expr)
         print(" "*indent + "block: " + block)
         print()
-    expr_py = convert_to_python_expr(expr)
+    expr_py = expr_module.convert_to_python(expr)
     python_code += " "*indent + "while " + expr_py + ":\n"
     to_convert = parse_block_to_statements(block)
     for statement in to_convert:
@@ -216,7 +213,7 @@ def exec_var_assign(var_assign, lookup_dict):
     # parse the variable assignment into its components
     type_name, var_name, expr = parse_var_assign(var_assign)
     # evaluate the expression
-    result = exec_expr(expr, lookup_dict)
+    result = expr_module.exec_expr(expr, lookup_dict)
     # assign the variable
     lookup_dict[var_name] = result
     return None
@@ -234,7 +231,7 @@ def convert_var_assign(var_assign, indent):
         print(" "*indent + "var_name: " + var_name)
         print(" "*indent + "expr: " + expr)
         print()
-    expr_py = convert_to_python_expr(expr)
+    expr_py = expr_module.convert_to_python(expr)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
     return python_code
 

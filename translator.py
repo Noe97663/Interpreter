@@ -3,6 +3,7 @@ import os
 import sys
 import parserX
 import statement
+import variable
 
 global DEBUG
 DEBUG = False
@@ -73,7 +74,7 @@ def main():
     args = parser.parse_args()
 
     # Map positional arguments to a dictionary
-    lookup_dict = {f'arg{i}': arg for i, arg in enumerate(args.args)}
+    lookup_dict = {f'arg{i}': variable.Value(arg, "<str_literal>") for i, arg in enumerate(args.args)}
 
     DEBUG = args.debug
     statement.DEBUG = args.debug
