@@ -132,6 +132,7 @@ def parse_var_to_lookup(expr):
     # error case
     else: 
         print("ERROR: Ran into an unknown error with expression: "+expr)
+        sys.exit(0)
     return lookup
 """
 exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of the form var_name: value (the class value). 
@@ -150,8 +151,8 @@ value = "xyz", type = "str_literal"
 <int> | <bool> | <str_literal>
 """
 
-def comp_expr_exe(expr,lookup_dict):
-    for op in ["==",  "/=",  ">=", "<=", "<<", ">>"]:
+def operator_expr_exec(expr,lookup_dict,ops,is_comp):
+    for op in ops:
         if expr.find(op)!=-1:
             expr = expr.split(op)
             left = expr[0]
@@ -159,34 +160,125 @@ def comp_expr_exe(expr,lookup_dict):
             # if left not string literal, int or bool
             if is_var(left):
                 if var_valid(left):
-                    ret_val.append(left)
+                    if left in lookup_dict:
+                        left = lookup_dict[left].value
+                    else:
+                        print("ERROR:",left,"has not been defined yet."+"(in "+expr+")")
+                        sys.exit(0)
                 else:
-                    print("ERROR",left,"is not a valid variable name.")
+                    print("ERROR",left,"is not a valid variable name." +"(in "+expr+")")
                     sys.exit(0)
-            elif :
-            
-            """if expr.find("\"")!=-1:
-            if expr[0]=="\"" and expr[-1]=="\"":
-                return lookup
+            # left is a string literal
+            elif left.find("\"")!=-1:
+                if left[0]=="\"" and left[-1]=="\"":
+                    left = left.strip("\"")
+                else:
+                    print("ERROR: string literal not in correct format: "+left +" in "+expr)
+                    sys.exit(0)
+            # left is an int
+            elif all(char.isdigit() for char in left):
+                left = int(left)
+            # left is a bool
+            elif left=="true":
+                left = True
+            elif left=="false":
+                left = False
             else:
-                print("ERROR: string literal not in correct format: "+expr)
+                print("ERROR: Trouble parsing "+left+ " in "+expr)
                 sys.exit(0)
-            #int
-            if all(char.isdigit() for char in expr):
-                return lookup
-            #bool
-                if expr=="true" or expr=="false":
-            return lookup"""
             # if right not string literal, int or bool
-            if (right.find("\"")==-1) and \
-            not(all(char.isdigit() for char in right)) and \
-            (right!="true" and right!="false"):
+            if is_var(right):
                 if var_valid(right):
-                    ret_val.append(right) 
+                    if right in lookup_dict:
+                        right = lookup_dict[right].value
+                    else:
+                        print("ERROR:",right,"has not been defined yet."+"(in "+expr+")")
+                        sys.exit(0)
                 else:
-                    print("ERROR:", right,"is not a valid variable name.")
+                    print("ERROR",right,"is not a valid variable name." +"(in "+expr+")")
                     sys.exit(0)
-            return ret_val
+            # right is a string literal
+            elif right.find("\"")!=-1:
+                if right[0]=="\"" and right[-1]=="\"":
+                    right = right.strip("\"")
+                else:
+                    print("ERROR: string literal not in correct format: "+right +" in "+expr)
+                    sys.exit(0)
+            # right is an int
+            elif all(char.isdigit() for char in right):
+                right = int(right)
+            # right is a bool
+            elif right=="true":
+                right = True
+            elif right=="false":
+                right = False
+            else:
+                print("ERROR: Trouble parsing "+right+ " in >>"+expr+"<<.")
+                sys.exit(0)
+            # HERE IS WHERE MATH EXPR AND COMP EXPR PARSE BRANCHES
+            # different checking if math expr
+            if not(is_comp):
+                if type(left)!=type(right):
+                    print("ERROR: Types on both sides of the operator are not the same in expr>>",expr+"<<.")
+                    sys.exit(0)
+                #types on both sides are equal
+
+                #str operations
+                if type(left)==str:
+                    if op!="+":
+                        print("ERROR: Cannot perform",op,"operation between strings",left,"and",right+".")
+                        sys.exit(0)
+                    return left+right
+                    
+                #bool operation
+                #["&&","||"]
+                elif type(left)==bool:
+                    if op=="&&":
+                        return (left and right)
+                    elif op=="||":
+                        return (left or right)
+                    else:
+                        print("ERROR: Cannot perform",op,"operation between booleans",left,"and",right+".")
+                        sys.exit(0)
+                #int operation
+                #["+", "-", "*","/", "%"]
+                #assuming types of left and right are int
+                else:
+                    if op=="+":
+                        return left+right
+                    elif op=="-":
+                        return left-right
+                    elif op=="*":
+                        return left*right
+                    elif op=="/":
+                        return left/right
+                    elif op=="%":
+                        return left%right
+                    else:
+                        print("ERROR: Cannot perform",op,"operation between integers",left,"and",right+".")
+                        sys.exit(0)
+
+            #comp expr, left and right defined now use operator
+            #["==",  "/=",  ">=", "<=", "<<", ">>"]
+            else:
+                try:
+                    if op=="==":
+                        return left==right
+                    elif op=="/=":
+                        return left!=right
+                    elif op==">=":
+                        return left>=right
+                    elif op=="<=":
+                        return left<=right
+                    elif op=="<<":
+                        return left<right
+                    else:
+                        return left>right
+                except:
+                    print("ERROR: Values",left,"and",right,"cannot be compared using comparison operators in",expr+".")
+                    sys.exit(0)
+
+            
 
 def exec_expr(expr,lookup_dict):
     expr_type = parse_expr_to_type(expr)
@@ -217,6 +309,7 @@ def exec_expr(expr,lookup_dict):
                 return lookup_dict[expr]
             else:
                 print("ERROR:",expr,"has not been defined yet.")
+                sys.exit(0)
         else:
             print("ERROR:",expr,"is not a valid variable name.")
             sys.exit(0)
@@ -226,17 +319,30 @@ def exec_expr(expr,lookup_dict):
         for var in vars:
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
-        return Value(comp_expr_exec(expr,lookup_dict),"bool")
+                sys.exit(0)
+        return Value(operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],True),"bool")
         
         
 
     elif expr_type == "<math_expr>":
-        to_add = parse_var_to_lookup_helper(expr,["+", "-", "*","/", "%","&&","||"]) 
-        lookup += to_add 
+        vars = parse_var_to_lookup(expr)
+        for var in vars:
+            if var not in lookup_dict:
+                print("ERROR:",var,"has not been defined yet.")
+                sys.exit(0)
+        ret_val = operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],False)
+        if type(ret_val)==str:
+            return Value(ret_val,"str_literal")
+        elif type(ret_val)==bool:
+            return Value(ret_val,"bool")
+        #assuming int
+        else:
+            return Value(ret_val,"int")
+        #check the type of the return value, then return a value type
     # error case
     else: 
         print("ERROR: Ran into an unknown error with expression: "+expr)
-    return lookup
+        sys.exit(0)
 
 def convert_to_python(expr):
     pass
