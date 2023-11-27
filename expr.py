@@ -7,7 +7,9 @@ A <val> should not have " and a digit in it, in any circumstance
 def val_valid(val):
     #checks if only valid characters are used
     for char in val:
-        if char != '"' and not char.isalnum():
+        if char != '"' and not char.isalnum() and char!=" ":
+            print("NOEL THE CHAR IS ->>"+char+"<<")
+            print("NOEL "+ val)
             return False
     
     string_lit = False
@@ -60,6 +62,7 @@ def parse_expr_to_type(expr):
                 print("ERROR: both types of ops found in >>"+expr+"<<")
                 sys.exit(1)
     if type_retval=="":
+        print("NOEL FOUND EXPRESSION TO BE A VAL"+expr)
         type_retval = "<val>"
     return type_retval
 """
@@ -70,8 +73,8 @@ def parse_var_to_lookup_helper(expr,ops):
     for op in ops:
             if expr.find(op)!=-1:
                 expr = expr.split(op)
-                left = expr[0]
-                right = expr[1]
+                left = expr[0].strip()
+                right = expr[1].strip()
                 # if left not string literal, int or bool
                 if is_var(left):
                     if var_valid(left):
@@ -94,12 +97,13 @@ parse_var_to_lookup(expr): INPUTS a single EXPR, and returns a list of variables
                            if expr type cannot be determined >> error string returned
 """
 def parse_var_to_lookup(expr):
+    expr = expr.strip()
     lookup = []
     expr_type = parse_expr_to_type(expr)
     if expr_type=="<val>":
-        #invaid val
+        #invalid val
         if not(val_valid(expr)):
-            print("ERROR: <val> type contains \" and digits in "+expr)
+            print("ERROR: <val> type contains \" and digits in >>"+expr+"<<")
             sys.exit(0)
         #string_literal
         if expr.find("\"")!=-1:
@@ -154,8 +158,8 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
     for op in ops:
         if expr.find(op)!=-1:
             expr = expr.split(op)
-            left = expr[0]
-            right = expr[1]
+            left = expr[0].strip()
+            right = expr[1].strip()
             # if left not string literal, int or bool
             if is_var(left):
                 if var_valid(left):
@@ -280,11 +284,12 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
             
 
 def exec_expr(expr,lookup_dict):
+    expr = expr.strip()
     expr_type = parse_expr_to_type(expr)
     if expr_type=="<val>":
         #invalid val
         if not(val_valid(expr)):
-            print("ERROR: <val> type contains \" and digits in "+expr)
+            print("ERROR: <val> type contains \" and digits in >>"+expr+"<<")
             sys.exit(0)
         #string_literal
         if expr.find("\"")!=-1:
@@ -351,8 +356,8 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
     for op in ops:
         if expr.find(op)!=-1:
             expr = expr.split(op)
-            left = expr[0]
-            right = expr[1]
+            left = expr[0].strip()
+            right = expr[1].strip()
             # if left not string literal, int or bool
             if is_var(left):
                 if var_valid(left):
@@ -509,11 +514,12 @@ convert_to_python(expr): INPUTS an EXPR, and returns a string of python code tha
                          This is for when we run in compiler mode.
 """
 def convert_to_python(expr,lookup_dict):
+    expr = expr.strip()
     expr_type = parse_expr_to_type(expr)
     if expr_type=="<val>":
         #invalid val
         if not(val_valid(expr)):
-            print("ERROR: <val> type contains \" and digits in "+expr)
+            print("ERROR: <val> type contains \" and digits in >>"+expr+"<<")
             sys.exit(0)
         #string_literal
         if expr.find("\"")!=-1:
@@ -548,7 +554,7 @@ def convert_to_python(expr,lookup_dict):
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
                 sys.exit(0)
-        return convert_to_python_operator_expr_exec(expr,["==",  "/=",  ">=", "<=", "<<", ">>"],True)
+        return convert_to_python_operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],True)
         
         
 
@@ -558,7 +564,7 @@ def convert_to_python(expr,lookup_dict):
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
                 sys.exit(0)
-        return convert_to_python_operator_expr_exec(expr,["+", "-", "*","/", "%","&&","||"],False)
+        return convert_to_python_operator_expr_exec(expr,lookup_dict,["+", "-", "*","/", "%","&&","||"],False)
     # error case
     else: 
         print("ERROR: Ran into an unknown error with expression: "+expr)

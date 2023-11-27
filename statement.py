@@ -76,7 +76,7 @@ def convert_if_statement(if_statement, lookup_dict, indent):
     # convert the if block
     to_convert = parse_block_to_statements(if_block)
     for statement in to_convert:
-        python_code += convert_to_python(statement, indent+4)
+        python_code += convert_to_python(statement,lookup_dict, indent+4)
     # convert the else block
     if else_block.strip() == "":
         return python_code
@@ -84,7 +84,7 @@ def convert_if_statement(if_statement, lookup_dict, indent):
         python_code += " "*indent + "else:\n"
         to_convert = parse_block_to_statements(else_block)
         for statement in to_convert:
-            python_code += convert_to_python(statement, indent+4)
+            python_code += convert_to_python(statement,lookup_dict, indent+4)
         return python_code
 
 
@@ -156,7 +156,7 @@ def convert_while_statement(while_statement, lookup_dict, indent):
     python_code += " "*indent + "while " + expr_py + ":\n"
     to_convert = parse_block_to_statements(block)
     for statement in to_convert:
-        python_code += convert_to_python(statement, indent+4)
+        python_code += convert_to_python(statement,lookup_dict, indent+4)
     return python_code
 
 """
@@ -231,6 +231,7 @@ def convert_var_assign(var_assign, lookup_dict, indent):
         print(" "*indent + "var_name: " + var_name)
         print(" "*indent + "expr: " + expr)
         print()
+    print("NOEL LOOK HERE",lookup_dict,indent)
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
     return python_code
