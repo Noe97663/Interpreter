@@ -17,7 +17,7 @@ expr.py:
 parse_expr_to_type(expr): INPUTS a single EXPR, and return the type as a STRING.
                                     Valid types of expr are: "<val>", <math_expr>, <comp_expr>.
 parse_var_to_lookup(expr): INPUTS a single EXPR, and returns a list of variables to look up. Eg. {x + y} should return [x, y].
-exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of variables. Return the value of that expression as a VARIABLE type. Perform error checking here.
+exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of variables. Return the value of that expression as a value type. Perform error checking here.
                                     Check if a variable is not defined. Check if a variable is not of the right type. Check if the types are right.
                                     This is only for when we run in interpreter mode.
 convert_to_python(expr): INPUTS an EXPR, and returns a string of python code that will evaluate the expression. This is for when we run in compiler mode.
