@@ -325,6 +325,10 @@ def exec_var_assign(var_assign, lookup_dict):
     result = expr_module.exec_expr(expr, lookup_dict)
     if result is None:
         return None
+    if (type_name != result.type):
+        print("ERROR: variable type does not match expression type")
+        return None
+
     # assign the variable
     lookup_dict[var_name] = result
     return None
@@ -344,9 +348,12 @@ def convert_var_assign(var_assign, lookup_dict, indent):
         print()
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
-    eval = expr_module.exec_expr(expr, lookup_dict)
-    if eval is None:
+    result = expr_module.exec_expr(expr, lookup_dict)
+    if result is None:
         sys.exit()
+    if (type_name != result.type):
+        print("ERROR: variable type does not match expression type")
+        return None
     lookup_dict[var_name] = eval
     return python_code
 
