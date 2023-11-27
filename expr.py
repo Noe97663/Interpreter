@@ -1,11 +1,5 @@
 import sys
 from variable import *
-"""
-expr.py:
-convert_to_python(expr): INPUTS an EXPR, and returns a string of python code that will evaluate the expression.
-                         This is for when we run in compiler mode.
-                         This is for when we run in compiler mode.
-"""
 
 """
 A <val> should not have " and a digit in it, in any circumstance
@@ -290,7 +284,7 @@ def exec_expr(expr,lookup_dict):
         #string_literal
         if expr.find("\"")!=-1:
             if expr[0]=="\"" and expr[-1]=="\"":
-                return Value(expr,"str_literal")
+                return Value(expr.strip("\""),"str_literal")
             else:
                 print("ERROR: string literal not in correct format: "+expr)
                 sys.exit(0)
@@ -332,7 +326,7 @@ def exec_expr(expr,lookup_dict):
                 sys.exit(0)
         ret_val = operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],False)
         if type(ret_val)==str:
-            return Value(ret_val,"str_literal")
+            return Value(ret_val.strip("\""),"str_literal")
         elif type(ret_val)==bool:
             return Value(ret_val,"bool")
         #assuming int
@@ -344,5 +338,72 @@ def exec_expr(expr,lookup_dict):
         print("ERROR: Ran into an unknown error with expression: "+expr)
         sys.exit(0)
 
+"""
+expr.py:
+convert_to_python(expr): INPUTS an EXPR, and returns a string of python code that will evaluate the expression.
+                         This is for when we run in compiler mode.
+                         This is for when we run in compiler mode.
+"""
 def convert_to_python(expr):
-    pass
+    expr_type = parse_expr_to_type(expr)
+    if expr_type=="<val>":
+        #invalid val
+        if not(val_valid(expr)):
+            print("ERROR: <val> type contains \" and digits in "+expr)
+            sys.exit(0)
+        #string_literal
+        if expr.find("\"")!=-1:
+            if expr[0]=="\"" and expr[-1]=="\"":
+                return Value(expr.strip("\""),"str_literal")
+            else:
+                print("ERROR: string literal not in correct format: "+expr)
+                sys.exit(0)
+        #int
+        if all(char.isdigit() for char in expr):
+            return Value(int(expr),"int")
+        #bool
+        if expr=="true" or expr=="false":
+            if(expr=="true"):
+                return Value(True,"bool")
+            else:
+                return Value(False,"bool")
+        #var_name
+        if var_valid(expr):
+            if expr in lookup_dict:
+                return lookup_dict[expr]
+            else:
+                print("ERROR:",expr,"has not been defined yet.")
+                sys.exit(0)
+        else:
+            print("ERROR:",expr,"is not a valid variable name.")
+            sys.exit(0)
+
+    elif expr_type == "<comp_expr>":
+        vars = parse_var_to_lookup(expr)
+        for var in vars:
+            if var not in lookup_dict:
+                print("ERROR:",var,"has not been defined yet.")
+                sys.exit(0)
+        return Value(operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],True),"bool")
+        
+        
+
+    elif expr_type == "<math_expr>":
+        vars = parse_var_to_lookup(expr)
+        for var in vars:
+            if var not in lookup_dict:
+                print("ERROR:",var,"has not been defined yet.")
+                sys.exit(0)
+        ret_val = operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],False)
+        if type(ret_val)==str:
+            return Value(ret_val.strip("\""),"str_literal")
+        elif type(ret_val)==bool:
+            return Value(ret_val,"bool")
+        #assuming int
+        else:
+            return Value(ret_val,"int")
+        #check the type of the return value, then return a value type
+    # error case
+    else: 
+        print("ERROR: Ran into an unknown error with expression: "+expr)
+        sys.exit(0)
