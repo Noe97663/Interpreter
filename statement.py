@@ -20,7 +20,6 @@ def exec_statement(statement, lookup_dict):
     else:
         print("ERROR: unknown statement type")
         print(statement)
-        sys.exit()
 
 def convert_to_python(statement, indent=0):
     statement_type = parse_statement_to_type(statement)
@@ -39,6 +38,9 @@ def convert_to_python(statement, indent=0):
 
     
 def exec_if_statement(if_statement, lookup_dict):
+    if_statement = if_statement.strip()
+    if(if_statement_err_checking(if_statement) == False):
+        return
     # parse the if statement into its components
     expr, if_block, else_block = parse_if_statement(if_statement)
     # evaluate the expression
@@ -58,6 +60,9 @@ def exec_if_statement(if_statement, lookup_dict):
                 exec_statement(statement, lookup_dict)
 
 def convert_if_statement(if_statement, indent):
+    if_statement = if_statement.strip()
+    if(if_statement_err_checking(if_statement) == False):
+        sys.exit()
     # parse the if statement into its components
     python_code = ""
     expr, if_block, else_block = parse_if_statement(if_statement)
@@ -90,9 +95,6 @@ def convert_if_statement(if_statement, indent):
 if ( <expr> ) <block> <else_clause>? | if (<expr>) <block>?
 """
 def parse_if_statement(if_statement):
-    if_statement = if_statement.strip()
-    if(if_statement_err_checking(if_statement) == False):
-        sys.exit()
     # parse the if statement into its components
     expr_start = if_statement.find("(")
     expr_end = if_statement.find(")")
@@ -129,6 +131,9 @@ def parse_if_statement(if_statement):
     return expr, if_block, else_block
 
 def exec_while_statement(while_statement, lookup_dict):
+    while_statement = while_statement.strip()
+    if (while_statement_err_checking(while_statement) == False):
+        return None
     expr, block = parse_while_statement(while_statement)
     result = exec_expr(expr, lookup_dict)
     if result.type == "<bool>":
@@ -139,6 +144,9 @@ def exec_while_statement(while_statement, lookup_dict):
             exec_while_statement(while_statement, lookup_dict)
 
 def convert_while_statement(while_statement, indent):
+    while_statement = while_statement.strip()
+    if (while_statement_err_checking(while_statement) == False):
+        sys.exit()
     python_code = ""
     expr, block = parse_while_statement(while_statement)
     if (DEBUG):
@@ -158,9 +166,6 @@ def convert_while_statement(while_statement, indent):
 <while_statement> ::= while ( <expr> ) <block>
 """
 def parse_while_statement(while_statement, DEBUG=False):
-    while_statement = while_statement.strip()
-    if (while_statement_err_checking(while_statement) == False):
-        sys.exit()
     # parse the while statement into its components
     expr_start = while_statement.find("(")
     expr_end = while_statement.find(")")
@@ -183,7 +188,7 @@ def parse_while_statement(while_statement, DEBUG=False):
 def exec_print_statement(print_statement, lookup_dict):
     print_statement = print_statement.strip()
     if (print_statement_err_checking(print_statement) == False):
-        sys.exit()
+        return None
     print_statement = print_statement[1:-1]
     # determine if the print statement is a string literal or a variable name
     if print_statement[0] == "\"":
@@ -205,6 +210,9 @@ def convert_print_statement(print_statement, indent):
     return python_code
 
 def exec_var_assign(var_assign, lookup_dict):
+    var_assign = var_assign.strip()
+    if (var_assign_err_checking(var_assign) == False):
+        return None
     # parse the variable assignment into its components
     type_name, var_name, expr = parse_var_assign(var_assign)
     # evaluate the expression
@@ -214,6 +222,9 @@ def exec_var_assign(var_assign, lookup_dict):
     return None
 
 def convert_var_assign(var_assign, indent):
+    var_assign = var_assign.strip()
+    if (var_assign_err_checking(var_assign) == False):
+        sys.exit()
     python_code = ""
     type_name, var_name, expr = parse_var_assign(var_assign)
     if (DEBUG):
@@ -229,8 +240,6 @@ def convert_var_assign(var_assign, indent):
 
 def parse_var_assign(var_assign):
     var_assign = var_assign.strip()
-    if (var_assign_err_checking(var_assign) == False):
-        sys.exit()
     # parse the variable assignment into its components
     left = var_assign[:var_assign.find("=")]
     left = left.split()

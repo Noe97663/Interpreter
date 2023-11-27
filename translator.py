@@ -37,8 +37,24 @@ def translate_file(filename, lookup_dict):
     print(python_code)
 
 def run_interpreter(lookup_dict):
-    print("Running in interpreter mode")
+    print("Running in interpreter mode ... 'exit?' to exit")
     print("{")
+    statement_buffer = ""
+    while True:
+        stmt = input(">> ")
+        if stmt == "exit?":
+            print("}")
+            sys.exit()
+        stmt = stmt.strip()
+        stmt = stmt.replace("\n", "")
+        if stmt[-1] == "?":
+            statement_buffer += stmt
+            statement.exec_statement(statement_buffer, lookup_dict)
+            statement_buffer = ""
+        else:
+            statement_buffer += stmt
+        
+
 
 def main():
     # Create the parser
