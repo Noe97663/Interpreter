@@ -22,13 +22,20 @@ def parse_string_to_blocks(string, debug=False):
 """
 INPUTS a BLOCK and parses it into a list of STATEMENTS. In the order they appear in the block. Each statement should end with a ?.
 If a block is nested, recurse. We should end up with a list of statements, or a list of lists of statements.
+This assumes that block starts with { and ends with }.
 """
 def parse_block_to_statements(block, debug=False):
+    block = block[1:-1]
     retval = []
     statement = ""
+    count = 0
     for char in block:
+        if char == "{":
+            count += 1
+        elif char == "}":
+            count -= 1
         statement += char
-        if char == "?":
+        if char == "?" and count == 0:
             statement = statement.strip()
             retval.append(statement)
             statement = ""
