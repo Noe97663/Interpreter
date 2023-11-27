@@ -8,7 +8,10 @@ import variable
 global DEBUG
 DEBUG = False
 
-def translate_file(filename, lookup_dict):
+"""
+This function translates a file to Python code.
+"""
+def translate_file(filename, lookup_dict, DEBUG = False):
     # open the file
     if not os.path.exists(filename):
         print("ERROR: file '" + filename + "' does not exist")
@@ -43,8 +46,58 @@ def translate_file(filename, lookup_dict):
     print("Text written to output.py successfully!")
     
 
-def run_interpreter(lookup_dict):
-    print("Running in interpreter mode ... 'exit?' to exit")
+"""
+This function runs the interpreter.
+"""
+def run_interpreter(lookup_dict, DEBUG = False):
+    initial_input = input("Input a file name to run line by line or enter to run in interactive mode: ")
+    initial_input = initial_input.strip()
+    if initial_input == "":
+        run_interpreter_interactive(lookup_dict)
+    else:
+        if not os.path.exists(initial_input):
+            print("ERROR: file '" + initial_input + "' does not exist")
+            sys.exit(1)
+        input_file = open(initial_input, "r")
+        input_string = input_file.read()
+        input_file.close()
+        blocks = parserX.parse_string_to_blocks(input_string)
+        if DEBUG:
+            print("Successfully opened file '" + initial_input + "'")
+            print(len(blocks), "blocks found")
+        if len(blocks) > 0:
+            print("Running in line by line mode, enter to continue ...")
+            input("")
+        else:
+            print("No blocks found. Are you sure you've correctly formatted your file?")
+        to_run = []
+        for block in blocks:
+            stmts = parserX.parse_block_to_statements(block)
+            if stmts is not None:
+                for stmt in stmts:
+                    to_run.append(stmt)
+        while len(to_run) > 0:
+            stmt = to_run.pop(0)
+            print(">>" + stmt)
+            statement.exec_statement(stmt, lookup_dict)
+            if DEBUG:
+                print()
+                print("Lookup dict:")
+                lookup_dict_str = ""
+                for key in lookup_dict:
+                    lookup_dict_str += key + ": " + str(lookup_dict[key]) + ", "
+                print(lookup_dict_str[:-2])
+            input("")
+
+        print("Done executing file '" + initial_input + "'")
+        print("Transitioning to interactive mode ...")
+        run_interpreter_interactive(lookup_dict)
+
+"""
+This function runs the interpreter in interactive mode.
+"""
+def run_interpreter_interactive(lookup_dict):
+    print("Running in interactive mode ... 'exit?' to exit")
     print("{")
     statement_buffer = ""
     while True:
@@ -54,15 +107,24 @@ def run_interpreter(lookup_dict):
             sys.exit()
         stmt = stmt.strip()
         stmt = stmt.replace("\n", "")
-        if stmt[-1] == "?":
+        if len(stmt) > 0 and stmt[-1] == "?":
             statement_buffer += stmt
             statement.exec_statement(statement_buffer, lookup_dict)
             statement_buffer = ""
+            if DEBUG:
+                print()
+                print("Lookup dict:")
+                lookup_dict_str = ""
+                for key in lookup_dict:
+                    lookup_dict_str += key + ": " + str(lookup_dict[key]) + ", "
+                print(lookup_dict_str[:-2])
         else:
             statement_buffer += stmt
         
 
-
+"""
+This is the main function. It parses the arguments and calls the appropriate functions.
+"""
 def main():
     # Create the parser
     parser = argparse.ArgumentParser(description="Custom Code to Python Translator/Interpreter")
@@ -80,7 +142,18 @@ def main():
     args = parser.parse_args()
 
     # Map positional arguments to a dictionary
-    lookup_dict = {f'arg{i}': variable.Value(arg, "<str_literal>") for i, arg in enumerate(args.args)}
+    lookup_dict = {}
+    for i, arg in enumerate(args.args):
+        if arg.isnumeric():
+            lookup_dict[f'arg{i}'] = variable.Value(arg, "int")
+        elif arg == "True":
+            lookup_dict[f'arg{i}'] = variable.Value(True, "bool")
+        elif arg == "False":
+            lookup_dict[f'arg{i}'] = variable.Value(False, "bool")
+        else:
+            lookup_dict[f'arg{i}'] = variable.Value(arg, "str_literal")
+
+
 
     DEBUG = args.debug
     statement.DEBUG = args.debug
@@ -89,9 +162,9 @@ def main():
         print("DEBUG MODE ON")
     # Implement the logic based on the arguments
     if args.translate:
-        translate_file(args.translate, lookup_dict)
+        translate_file(args.translate, lookup_dict, DEBUG = args.debug)
     elif args.interpreter:
-        run_interpreter(lookup_dict)
+        run_interpreter(lookup_dict, DEBUG = args.debug)
 
 if __name__ == '__main__':
     main()

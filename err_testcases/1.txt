@@ -1,0 +1,8 @@
+{
+    int x = 4?
+    int y = 5;?
+    z = 6?
+    while (x < 4 {
+        int x = x - 1?
+    }?
+}

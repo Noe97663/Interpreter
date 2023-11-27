@@ -1,13 +1,9 @@
 """
-INPUTS a LONG string of text and parses it into a list of BLOCKS each block starting with { and ending with }. The blocks can be nested. 
-DELETES UNNECESSARY SPACES and NEW LINES.
+This function takes in a string and returns a list of blocks.
 """
-import sys
-
-
 def parse_string_to_blocks(string):
     string = string.replace("\n", "")
-    ' '.join(string.split())
+    string = ' '.join(string.split())
     retval = []
     block = ""
     count = 0
@@ -18,14 +14,13 @@ def parse_string_to_blocks(string):
             count -= 1
         block += char
         if count == 0:
-            retval.append(block)
+            if (len(block) > 0 and block[0] == "{"):
+                retval.append(block)
             block = ""
     return retval
 
 """
-INPUTS a BLOCK and parses it into a list of STATEMENTS. In the order they appear in the block. Each statement should end with a ?.
-If a block is nested, recurse. We should end up with a list of statements, or a list of lists of statements.
-This assumes that block starts with { and ends with }.
+This function takes in a block and returns a list of statements.
 """
 def parse_block_to_statements(block):
     block = block.strip()
@@ -45,13 +40,13 @@ def parse_block_to_statements(block):
             statement = ""
     if statement != "":
         print("ERROR: statement does not end with '?'")
-        print(statement)
-        print(block)
-        sys.exit(1)
+        print("ERROR: " + statement)
+        print("ERROR: " + block)
+        return None
     if count != 0:
         print("ERROR: incorrect number of '{' or '}' in block")
-        print(block)
-        sys.exit(1)
+        print("ERROR: " + block)
+        return None
     return retval
 
 """
@@ -62,71 +57,90 @@ ONLY 0-9, a-Z is supported so far.
 A statement can be a block (a list of statements), but we don't handle it here. This is only for single statements.
 """
 def parse_statement_to_type(statement):
-    if "if" in statement:
+    statement = statement.strip()
+    if len(statement) <= 1:
+        return None
+    if statement[0:2] == "if":
         return "<if_statement>"
-    elif "while" in statement:
+    if statement[0:5] == "while":
         return "<while_statement>"
-    elif "!" in statement:
+    if statement[0] == "!":
         return "<print_statement>"
-    # default to variable assignment
-    return "<var_assign>"
+    if "=" in statement:
+        return "<var_assign>"
+    else:
+        print("ERROR: statement type not recognized")
+        print("ERROR: " + statement)
+    
 
 """
-<if_statement> ::= if ( <expr> ) <block> <else_clause>? | if (<expr>) <block>?
+This function takes in an if statement and error checks it.
 """
 def if_statement_err_checking(statement):
     if statement[0:2] != "if":
         print("ERROR: if statement should start with 'if'")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     if statement[-1] != "?":
         print("ERROR: if statement should end with '?'")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     return True
 
+"""
+This function takes in a while statement and error checks it.
+"""
 def while_statement_err_checking(statement):
     if statement[0:5] != "while":
         print("ERROR: while statement should start with 'while'")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     if statement[-1] != "?":
         print("ERROR: while statement should end with '?'")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     return True
 
+"""
+This function takes in a print statement and error checks it.
+"""
 def print_statement_err_checking(statement):
+    if len(statement) <= 2:
+        print("ERROR: missing argument in print statement")
+        print("ERROR: " + statement)
     if statement[0] != "!":
         print("ERROR: print statement should start with '!'")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     if statement[-1] != "?":
         print("ERROR: print statement should end with '?'")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     return True
 
+"""
+This function takes in a variable assignment statement and error checks it.
+"""
 def var_assign_err_checking(statement):
     if statement[-1] != "?":
         print("ERROR: variable assignment statement should end with '?'")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     # check if equals sign is present
     if "=" not in statement:
         print("ERROR: variable assignment statement should contain '='")
-        print(statement)
+        print("ERROR: " + statement)
         return False
     # check if type is valid
     if ["int", "bool", "str"].count(statement.split()[0]) == 0:
         print("ERROR: variable assignment statement should contain a valid type")
-        print(statement)
-        print(statement.split()[0] + " is not a valid type")
+        print("ERROR: " + statement)
+        print("ERROR: " + statement.split()[0] + " is not a valid type")
         return False
     # check if variable name is valid
     if statement.split()[1].isalnum() == False:
         print("ERROR: variable assignment statement should contain a valid variable name")
-        print(statement)
-        print(statement.split()[1] + " is not a valid variable name. Only alphanumeric characters are allowed.")
+        print("ERROR: " + statement)
+        print("ERROR: " + statement.split()[1] + " is not a valid variable name. Only alphanumeric characters are allowed.")
         return False
     return True

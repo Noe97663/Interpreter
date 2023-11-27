@@ -1,0 +1,16 @@
+{
+        while (x < 4 {
+        int x = x - 1?
+    }?
+
+    int x = 0?
+    if (x + 4) {
+        int x = x - 1?
+    }?
+
+    if ((x == 0) {
+        int x = x + 2?}
+    else {
+        int x = x + 1??
+    }?
+}
