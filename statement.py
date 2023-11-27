@@ -231,7 +231,6 @@ def convert_var_assign(var_assign, lookup_dict, indent):
         print(" "*indent + "var_name: " + var_name)
         print(" "*indent + "expr: " + expr)
         print()
-    print("NOEL LOOK HERE",lookup_dict,indent)
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
     return python_code

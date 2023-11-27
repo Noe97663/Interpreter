@@ -1,5 +1,7 @@
 import sys
 from variable import *
+global DEBUG
+DEBUG = False
 
 """
 A <val> should not have " and a digit in it, in any circumstance
@@ -8,8 +10,6 @@ def val_valid(val):
     #checks if only valid characters are used
     for char in val:
         if char != '"' and not char.isalnum() and char!=" ":
-            print("NOEL THE CHAR IS ->>"+char+"<<")
-            print("NOEL "+ val)
             return False
     
     string_lit = False
@@ -62,7 +62,6 @@ def parse_expr_to_type(expr):
                 print("ERROR: both types of ops found in >>"+expr+"<<")
                 sys.exit(1)
     if type_retval=="":
-        print("NOEL FOUND EXPRESSION TO BE A VAL"+expr)
         type_retval = "<val>"
     return type_retval
 """

@@ -34,6 +34,7 @@ def translate_file(filename, lookup_dict):
     for block in blocks:
         stmts = parserX.parse_block_to_statements(block)
         for stmt in stmts:
+            #NOEL
             python_code += statement.convert_to_python(stmt,lookup_dict)
     print(python_code)
 
