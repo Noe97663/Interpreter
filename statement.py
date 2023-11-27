@@ -289,7 +289,8 @@ def exec_print_statement(print_statement, lookup_dict):
     else:
         if print_statement not in lookup_dict:
             print("ERROR: variable '" + print_statement + "' not declared")
-        print(lookup_dict[print_statement])
+        else:
+            print(lookup_dict[print_statement])
     return None
 
 def convert_print_statement(print_statement, lookup_dict, indent):
