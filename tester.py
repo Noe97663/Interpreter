@@ -5,13 +5,13 @@ from variable import *
 
 DEBUG = True
 
-input_file = open("test_case2.txt", "r")
+input_file = open("test_case1.txt", "r")
 input_string = input_file.read()
 input_file.close()
 
 print(input_string)
 
-lookup_dict = {'x' : Value(3, "<int>")}
+lookup_dict = {}
 output = parse_string_to_blocks(input_string)
 for block in output:
     temp = parse_block_to_statements(block)

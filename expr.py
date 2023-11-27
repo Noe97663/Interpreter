@@ -102,7 +102,7 @@ def parse_var_to_lookup(expr):
     if expr_type=="<val>":
         #invalid val
         if not(val_valid(expr)):
-            print("ERROR: <val> type contains \" and digits in >>"+expr+"<<")
+            print("ERROR: <val> type contains invalid combination-of-characters/character(s) in >>"+expr+"<<")
             sys.exit(0)
         #string_literal
         if expr.find("\"")!=-1:
@@ -288,7 +288,7 @@ def exec_expr(expr,lookup_dict):
     if expr_type=="<val>":
         #invalid val
         if not(val_valid(expr)):
-            print("ERROR: <val> type contains \" and digits in >>"+expr+"<<")
+            print("ERROR: <val> type contains invalid combination-of-characters/character(s) or in >>"+expr+"<<")
             sys.exit(0)
         #string_literal
         if expr.find("\"")!=-1:
@@ -518,7 +518,7 @@ def convert_to_python(expr,lookup_dict):
     if expr_type=="<val>":
         #invalid val
         if not(val_valid(expr)):
-            print("ERROR: <val> type contains \" and digits in >>"+expr+"<<")
+            print("ERROR: <val> type contains invalid combination-of-characters/character(s) in >>"+expr+"<<")
             sys.exit(0)
         #string_literal
         if expr.find("\"")!=-1:
