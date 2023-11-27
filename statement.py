@@ -1,32 +1,51 @@
 import sys
 from parserX import *
+from expr import *
+
+global DEBUG
+DEBUG = True
 
 def exec_statement(statement, lookup_dict):
     pass
     # check if statement is an if statement
     if "if" in statement:
         # execute the if statement
-        return exec_if_statement(statement, lookup_dict)
+        exec_if_statement(statement, lookup_dict)
     # check if statement is a while statement
     elif "while" in statement:
         # execute the while statement
-        return exec_while_statement(statement, lookup_dict)
+        exec_while_statement(statement, lookup_dict)
     # check if statement is a print statement
     elif "!" in statement:
         # execute the print statement
-        return exec_print_statement(statement, lookup_dict)
+        exec_print_statement(statement, lookup_dict)
     # default to variable assignment
     else:
         # execute the variable assignment
-        return exec_var_assign(statement, lookup_dict)
+        exec_var_assign(statement, lookup_dict)
     
 def exec_if_statement(if_statement, lookup_dict):
-    pass
-
+    # parse the if statement into its components
+    expr, if_block, else_block = parse_if_statement(if_statement)
+    # evaluate the expression
+    result = exec_expr(expr, lookup_dict)
+    if result.type == "bool":
+        if result.value == "true":
+            # execute the if block
+            to_exec = parse_block_to_statements(if_block)
+            for statement in to_exec:
+                exec_statement(statement, lookup_dict)
+        else:
+            # execute the else block
+            if else_block is None:
+                return
+            to_exec = parse_block_to_statements(else_block)
+            for statement in to_exec:
+                exec_statement(statement, lookup_dict)
 """
 if ( <expr> ) <block> <else_clause>? | if (<expr>) <block>?
 """
-def parse_if_statement(if_statement, debug=False):
+def parse_if_statement(if_statement):
     # parse the if statement into its components
     expr_start = if_statement.find("(")
     expr_end = if_statement.find(")")
@@ -59,7 +78,7 @@ def parse_if_statement(if_statement, debug=False):
             cur += 1
             if count == 0:
                 break
-    if (debug):
+    if (DEBUG):
         print("Parsing if statement:")
         print("if_statement: " + if_statement)
         print("expr: " + expr)
@@ -68,12 +87,19 @@ def parse_if_statement(if_statement, debug=False):
     return expr, if_block, else_block
 
 def exec_while_statement(while_statement, lookup_dict):
-    pass
+    expr, block = parse_while_statement(while_statement)
+    result = exec_expr(expr, lookup_dict)
+    if result.type == "bool":
+        if result.value == "true":
+            to_exec = parse_block_to_statements(block)
+            for statement in to_exec:
+                exec_statement(statement, lookup_dict)
+            exec_while_statement(while_statement, lookup_dict)
 
 """
 <while_statement> ::= while ( <expr> ) <block>
 """
-def parse_while_statement(while_statement, debug=False):
+def parse_while_statement(while_statement, DEBUG=False):
     # parse the while statement into its components
     expr_start = while_statement.find("(")
     expr_end = while_statement.find(")")
@@ -92,7 +118,7 @@ def parse_while_statement(while_statement, debug=False):
         if count == 0:
             break
 
-    if (debug):
+    if (DEBUG):
         print("Parsing while statement:")
         print("while_statement: " + while_statement)
         print("expr: " + expr)
@@ -111,7 +137,25 @@ def exec_print_statement(print_statement, lookup_dict):
         print(lookup_dict[print_statement])
     return None
 
-        
+def exec_var_assign(var_assign, lookup_dict):
+    # parse the variable assignment into its components
+    var_name, expr = parse_var_assign(var_assign)
+    # evaluate the expression
+    result = exec_expr(expr, lookup_dict)
+    # assign the variable
+    lookup_dict[var_name] = result
+    return None
+
+def parse_var_assign(var_assign, DEBUG=False):
+    # parse the variable assignment into its components
+    var_name = var_assign[:var_assign.find("=")]
+    expr = var_assign[var_assign.find("=")+1:-1]
+    if (DEBUG):
+        print("Parsing variable assignment:")
+        print("var_assign: " + var_assign)
+        print("var_name: " + var_name)
+        print("expr: " + expr)
+    return var_name, expr
 
 
 
