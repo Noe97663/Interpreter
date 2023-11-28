@@ -529,6 +529,8 @@ convert_to_python(expr): INPUTS an EXPR, and returns a string of python code tha
                          This is for when we run in compiler mode.
 """
 def convert_to_python(expr,lookup_dict):
+    if(DEBUG):
+        print("NOEL HAHAHA")
     expr = expr.strip()
     expr_type = parse_expr_to_type(expr)
     if expr_type is None:

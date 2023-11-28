@@ -157,6 +157,7 @@ def main():
 
     DEBUG = args.debug
     statement.DEBUG = args.debug
+    statement.expr_module.DEBUG = args.debug
     parserX.DEBUG = args.debug
     if DEBUG:
         print("DEBUG MODE ON")
