@@ -111,6 +111,8 @@ def convert_if_statement(if_statement, lookup_dict, indent):
         print()
     
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
+    if expr_py is None:
+        sys.exit(0)
     python_code += " "*indent + "if " + expr_py + ":\n"
     # convert the if block
     to_convert = parse_block_to_statements(if_block)

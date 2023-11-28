@@ -151,13 +151,13 @@ def main():
         # arg names are arga, argb, argc, etc.
         var_name = "arg" + chr(ord('a') + i)
         if arg.isnumeric():
-            lookup_dict[var_name] = variable.Value(arg, "int")
-        elif arg == "True":
+            lookup_dict[var_name] = variable.Value(int(arg), "int")
+        elif arg == "true":
             lookup_dict[var_name] = variable.Value(True, "bool")
-        elif arg == "False":
+        elif arg == "false":
             lookup_dict[var_name] = variable.Value(False, "bool")
         else:
-            lookup_dict[var_name] = variable.Value(arg, "str_literal")
+            lookup_dict[var_name] = variable.Value(arg, "str")
         if DEBUG:
             print("arg:", var_name, "value:", lookup_dict[var_name], "type:", lookup_dict[var_name].type)
     # Implement the logic based on the arguments

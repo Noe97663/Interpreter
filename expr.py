@@ -530,7 +530,7 @@ convert_to_python(expr): INPUTS an EXPR, and returns a string of python code tha
 """
 def convert_to_python(expr,lookup_dict):
     if(DEBUG):
-        print("NOEL HAHAHA")
+        print("NOEL WRITE DEBUG TEXT")
     expr = expr.strip()
     expr_type = parse_expr_to_type(expr)
     if expr_type is None:
