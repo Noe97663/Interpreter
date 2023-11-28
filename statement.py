@@ -291,8 +291,10 @@ def parse_while_statement(while_statement):
         return None, None
     if expr_start == -1 or expr_end == -1:
         return None, None
+    # parse the expression
     expr = while_statement[expr_start+1:expr_end]
 
+    # parse the block
     block = ""
     count = 0
     cur = while_statement.find("{")
