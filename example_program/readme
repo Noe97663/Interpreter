@@ -1,4 +1,0 @@
-triangle.txt
--- Given the length of three sides of a triangle, determine whether the triangle is a valid triangle using
--- the triangle inequality theorem.
-Example use: python3 translator.py -t example_program/triangle.txt 2 3 4

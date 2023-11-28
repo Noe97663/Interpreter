@@ -26,7 +26,7 @@ These are the basic features that the Interpreter handles:
 
 ● command line arguments
 
-Additional features being worked on include:
+Additional features:
 
 --Implement an interactive system that allows the user to type in commands in your
   language and see the results. Please note that this would not replace the
@@ -47,4 +47,22 @@ Additional features being worked on include:
   
 --Add an optional feature that explicitly shows the parsing process.
 
---Add a scoping system.
+How to use:
+usage: python translator.py [-h] (-t FILENAME | -i) [-d] [args ...]
+
+TRANSLATE A FILE:
+python translator.py -t FILENAME 
+
+INTERPRETOR MODE:
+python translator.py -i
+
+You can add a -d flag to see parsing/debug information for both MODES.
+You can add additional arguments at the end. Each argument will be stored as
+variable arga, argb, argc ...
+
+Example programs:
+triangle.txt
+-- Given the length of three sides of a triangle, determine whether the triangle is a valid triangle using
+-- the triangle inequality theorem.
+-- Calculate the perimeter.
+Example use: python3 translator.py -t example_program/triangle.txt 2 3 4
