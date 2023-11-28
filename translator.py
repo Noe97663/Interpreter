@@ -145,7 +145,7 @@ def main():
 
     # Map positional arguments to a dictionary
     lookup_dict = {}
-    if len(args.args) > 0:
+    if len(args.args) > 0 and DEBUG:
         print("Additional arguments passed in:")
     for i, arg in enumerate(args.args):
         # arg names are arga, argb, argc, etc.
