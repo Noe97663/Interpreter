@@ -73,3 +73,6 @@ triangle.txt
 -- the triangle inequality theorem.
 -- Calculate the perimeter.
 Example use: python3 translator.py -t example_program/triangle.txt 2 3 4
+
+Error checking:
+Running files in err_testcases provide examples of syntax and type checking.
