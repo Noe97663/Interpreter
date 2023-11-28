@@ -4,8 +4,8 @@ from expr import *
 # TESTS for exec_expr(expr,lookup_dict)
 
 
-
-if not None:
+x=None
+if x is None:
     print("dab")
 
 
