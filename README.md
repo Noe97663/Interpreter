@@ -26,7 +26,7 @@ These are the basic features that the Interpreter handles:
 
 ● command line arguments
 
-Additional features being worked on include:
+Additional features:
 
 --Implement an interactive system that allows the user to type in commands in your
   language and see the results. Please note that this would not replace the
@@ -46,8 +46,6 @@ Additional features being worked on include:
   likely need to implement your own pattern matching.)
   
 --Add an optional feature that explicitly shows the parsing process.
-
---Add a scoping system.
 
 How to use:
 usage: python translator.py [-h] (-t FILENAME | -i) [-d] [args ...]
