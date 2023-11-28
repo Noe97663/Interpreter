@@ -16,13 +16,25 @@
         if (argac > argb) {
             if (argbc > arga) {
                 !"This is a valid triangle."?
+                bool isValid = true?
             } else {
                 !"This is not a valid triangle."?
+                bool isValid = false?
             }?
         } else {
             !"This is not a valid triangle."?
+            bool isValid = false?
         }?
     } else {
         !"This is not a valid triangle."?
+        bool isValid = false?
     }?
+}
+{
+    if (isValid) {
+        int perimeter = arga + argb?
+        int perimeter = perimeter + argc?
+        !"The perimeter of this triangle is: "?
+        !perimeter?
+    }
 }

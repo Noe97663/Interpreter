@@ -1,9 +1,17 @@
+"""
+This file contains functions that execute or convert statements into Python code.
+"""
+
 import sys
 from parserX import *
 import expr as expr_module
 global DEBUG
 DEBUG = False
 
+"""
+This function is given a statement. It identifies the type of statement and
+calls the appropriate function to execute the statement.
+"""
 def exec_statement(statement, lookup_dict):
     statement_type = parse_statement_to_type(statement)
     if statement_type == "<if_statement>":
@@ -17,6 +25,10 @@ def exec_statement(statement, lookup_dict):
     else:
         return
 
+"""
+This function is given a statement. It identifies the type of statement and
+calls the appropriate function to convert the statement to Python code.
+"""
 def convert_to_python(statement, lookup_dict, indent=0):
     statement_type = parse_statement_to_type(statement)
     if statement_type == "<if_statement>":
@@ -32,7 +44,11 @@ def convert_to_python(statement, lookup_dict, indent=0):
         print("ERROR: " + statement)
         sys.exit()
 
-    
+
+"""
+This function is given an if statement. It checks for errors in the if statement.
+If there are no errors, the statement is executed.
+"""
 def exec_if_statement(if_statement, lookup_dict):
     if_statement = if_statement.strip()
     if(if_statement_err_checking(if_statement) == False):
@@ -86,6 +102,11 @@ def exec_if_statement(if_statement, lookup_dict):
         print("ERROR: if statement expression should evaluate to a boolean")
         print("ERROR: " + if_statement)
 
+"""
+This function is given an if statement. It checks for errors in the if statement.
+If there are no errors, the statement is converted to Python code. If there are
+errors, the program exits.
+"""
 def convert_if_statement(if_statement, lookup_dict, indent):
     if_statement = if_statement.strip()
     if(if_statement_err_checking(if_statement) == False):
@@ -134,7 +155,8 @@ def convert_if_statement(if_statement, lookup_dict, indent):
 
 
 """
-if ( <expr> ) <block> <else_clause>? | if (<expr>) <block>?
+This function is given an if statement. It parses the if statement into its
+components and returns the components. Performs error checking.
 """
 def parse_if_statement(if_statement):
     # parse the if statement into its components
@@ -147,8 +169,10 @@ def parse_if_statement(if_statement):
         return None, None, None
     if expr_start == -1 or expr_end == -1:
         return None, None, None
+    # parse the expression
     expr = if_statement[expr_start+1:expr_end]
 
+    # parse the if block
     if_block = ""
     count = 0
     cur = if_statement.find("{")
@@ -164,6 +188,7 @@ def parse_if_statement(if_statement):
         if count == 0:
             break
 
+    # parse the else block
     if_statement2 = if_statement[cur+1:]
     else_block = ""
     if "else" in if_statement2:
@@ -181,6 +206,10 @@ def parse_if_statement(if_statement):
 
     return expr, if_block, else_block
 
+"""
+This function is given a while statement. It checks for errors in the while statement.
+If there are no errors, the statement is executed.
+"""
 def exec_while_statement(while_statement, lookup_dict):
     while_statement = while_statement.strip()
     if (while_statement_err_checking(while_statement) == False):
@@ -219,6 +248,11 @@ def exec_while_statement(while_statement, lookup_dict):
         print("ERROR: while statement expression should evaluate to a boolean")
         print("ERROR: " + while_statement)
 
+"""
+This function is given a while statement. It checks for errors in the while statement.
+If there are no errors, the statement is converted to Python code. If there are
+errors, the program exits.
+"""
 def convert_while_statement(while_statement, lookup_dict, indent):
     while_statement = while_statement.strip()
     if (while_statement_err_checking(while_statement) == False):
@@ -249,7 +283,8 @@ def convert_while_statement(while_statement, lookup_dict, indent):
     return python_code
 
 """
-<while_statement> ::= while ( <expr> ) <block>
+This function is given a while statement. It parses the while statement into its
+components and returns the components. Performs error checking.
 """
 def parse_while_statement(while_statement):
     # parse the while statement into its components
@@ -262,8 +297,10 @@ def parse_while_statement(while_statement):
         return None, None
     if expr_start == -1 or expr_end == -1:
         return None, None
+    # parse the expression
     expr = while_statement[expr_start+1:expr_end]
 
+    # parse the block
     block = ""
     count = 0
     cur = while_statement.find("{")
@@ -280,6 +317,10 @@ def parse_while_statement(while_statement):
             break
     return expr, block
 
+"""
+This function is given a print statement. It checks for errors in the print statement.
+If there are no errors, the statement is executed.
+"""
 def exec_print_statement(print_statement, lookup_dict):
     print_statement = print_statement.strip()
     if (print_statement_err_checking(print_statement) == False):
@@ -295,6 +336,11 @@ def exec_print_statement(print_statement, lookup_dict):
             print(lookup_dict[print_statement])
     return None
 
+"""
+This function is given a print statement. It checks for errors in the print statement.
+If there are no errors, the statement is converted to Python code. If there are
+errors, the program exits.
+"""
 def convert_print_statement(print_statement, lookup_dict, indent):
     print_statement = print_statement.strip()
     if (print_statement_err_checking(print_statement) == False):
@@ -311,6 +357,10 @@ def convert_print_statement(print_statement, lookup_dict, indent):
         python_code += " "*indent + "print(" + print_statement + ")\n"
         return python_code
 
+"""
+This function is given a variable assignment. It checks for errors in the variable
+assignment. If there are no errors, the statement is executed.
+"""
 def exec_var_assign(var_assign, lookup_dict):
     var_assign = var_assign.strip()
     if (var_assign_err_checking(var_assign) == False):
@@ -339,6 +389,11 @@ def exec_var_assign(var_assign, lookup_dict):
     lookup_dict[var_name] = result
     return None
 
+"""
+This function is given a variable assignment. It checks for errors in the variable
+assignment. If there are no errors, the statement is converted to Python code.
+If there are errors, the program exits.
+"""
 def convert_var_assign(var_assign, lookup_dict, indent):
     var_assign = var_assign.strip()
     if (var_assign_err_checking(var_assign) == False):
@@ -366,6 +421,10 @@ def convert_var_assign(var_assign, lookup_dict, indent):
     lookup_dict[var_name] = result
     return python_code
 
+"""
+This function is given a statement. It parses the statement into its components
+and returns the components. Performs error checking.
+"""
 def parse_var_assign(var_assign):
     var_assign = var_assign.strip()
     # parse the variable assignment into its components

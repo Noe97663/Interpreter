@@ -1,4 +1,8 @@
 """
+This file contains functions that parse the input string into blocks, statements, and types.
+"""
+
+"""
 This function takes in a string and returns a list of blocks.
 """
 def parse_string_to_blocks(string):
