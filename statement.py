@@ -1,3 +1,7 @@
+"""
+This file contains functions that execute or convert statements into Python code.
+"""
+
 import sys
 from parserX import *
 import expr as expr_module
