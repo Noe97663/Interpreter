@@ -138,7 +138,7 @@ def convert_if_statement(if_statement, lookup_dict, indent):
     # convert the if block
     to_convert = parse_block_to_statements(if_block)
     if to_convert == None:
-        sys.exit()
+        sys.exit(0)
     for statement in to_convert:
         python_code += convert_to_python(statement,lookup_dict, indent+4)
     # convert the else block
@@ -275,7 +275,7 @@ def convert_while_statement(while_statement, lookup_dict, indent):
         print()
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
     if expr_py is None:
-        return None
+        sys.exit(0)
     python_code += " "*indent + "while " + expr_py + ":\n"
     to_convert = parse_block_to_statements(block)
     if to_convert == None:
@@ -411,11 +411,11 @@ def convert_var_assign(var_assign, lookup_dict, indent):
         print()
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
     if expr_py is None:
-        sys.exit()
+        sys.exit(0)
     python_code += " "*indent + var_name + " = " + expr_py + "\n"
     result = expr_module.exec_expr(expr, lookup_dict)
     if result is None:
-        sys.exit()
+        sys.exit(0)
     if (type_name != result.type):
         print("ERROR: variable type does not match expression type")
         print("ERROR: " + var_name + " has type " + type_name + " but expression has type " + result.type)
