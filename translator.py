@@ -35,10 +35,6 @@ def translate_file(filename, lookup_dict, DEBUG = False):
             #NOEL
             python_code += statement.convert_to_python(stmt,lookup_dict)
     print(python_code)
-    # Writing the text to a file named output.py
-    with open("output.py", "w") as file:
-        file.write(python_code)
-    print("Text written to output.py successfully!")
     
 
 """
