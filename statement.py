@@ -274,6 +274,8 @@ def convert_while_statement(while_statement, lookup_dict, indent):
         print(" "*indent + "block: " + block)
         print()
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
+    if expr_py is None:
+        return None
     python_code += " "*indent + "while " + expr_py + ":\n"
     to_convert = parse_block_to_statements(block)
     if to_convert == None:
