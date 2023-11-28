@@ -5,7 +5,7 @@ from variable import *
 
 DEBUG = True
 
-input_file = open("test_case1.txt", "r")
+input_file = open("example_program/test_case2.txt", "r")
 input_string = input_file.read()
 input_file.close()
 

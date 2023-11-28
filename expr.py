@@ -5,7 +5,6 @@ DEBUG = False
 """
 A <val> should not have " and a digit in it, in any circumstance
 """
-#NOEL CHECKED
 def val_valid(val):
     #checks if only valid characters are used
     for char in val:
@@ -26,7 +25,6 @@ def val_valid(val):
 """
 A var_name should not have a digit in it, in any circumstance
 """
-#NOEL CHECKED
 def var_valid(var_name):
     contains_alpha = any(char.isalpha() for char in var_name)
     contains_digit = any(char.isdigit() for char in var_name)
@@ -38,7 +36,6 @@ def var_valid(var_name):
 determine if the val is a var_name or not.
 True, if it is a var_name
 """
-#NOEL CHECKED
 def is_var(val):
     return (val.find("\"")==-1) and \
             not(any(char.isdigit() for char in val)) and \
@@ -49,7 +46,6 @@ def is_var(val):
                              if no operators >> <val>
                              if both operators >> error string
 """
-#NOEL CHECKED
 def parse_expr_to_type(expr):
     type_retval = ""
     comp_ops = ["==",  "/=",  ">=", "<=", "<<", ">>"]
@@ -72,7 +68,6 @@ def parse_expr_to_type(expr):
 """
 helps gather left and right variables for an expression with an operator
 """
-#NOEL CHECKED
 def parse_var_to_lookup_helper(expr,ops):
     ret_val = []
     for op in ops:
@@ -103,7 +98,6 @@ parse_var_to_lookup(expr): INPUTS a single EXPR, and returns a list of variables
 
                            if expr type cannot be determined >> error string returned
 """
-#NOEL CHECKED
 def parse_var_to_lookup(expr):
     expr = expr.strip()
     lookup = []
@@ -290,9 +284,9 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     elif op=="-":
                         return left-right
                     elif op=="*":
-                        return left*right
+                        return int(left*right)
                     elif op=="/":
-                        return left/right
+                        return int(left/right)
                     elif op=="%":
                         return left%right
                     else:
@@ -545,9 +539,9 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     elif op=="-":
                         return left+" - "+right
                     elif op=="*":
-                        return left+" * "+right
+                        return "int("+left+" * "+right + ")"
                     elif op=="/":
-                        return left+" / "+right
+                        return "int("+left+" / "+right + ")"
                     elif op=="%":
                         return left+" % "+right
                     else:
