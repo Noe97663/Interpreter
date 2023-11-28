@@ -277,7 +277,8 @@ def convert_while_statement(while_statement, lookup_dict, indent):
     return python_code
 
 """
-<while_statement> ::= while ( <expr> ) <block>
+This function is given a while statement. It parses the while statement into its
+components and returns the components. Performs error checking.
 """
 def parse_while_statement(while_statement):
     # parse the while statement into its components
@@ -308,6 +309,10 @@ def parse_while_statement(while_statement):
             break
     return expr, block
 
+"""
+This function is given a print statement. It checks for errors in the print statement.
+If there are no errors, the statement is executed.
+"""
 def exec_print_statement(print_statement, lookup_dict):
     print_statement = print_statement.strip()
     if (print_statement_err_checking(print_statement) == False):
@@ -323,6 +328,11 @@ def exec_print_statement(print_statement, lookup_dict):
             print(lookup_dict[print_statement])
     return None
 
+"""
+This function is given a print statement. It checks for errors in the print statement.
+If there are no errors, the statement is converted to Python code. If there are
+errors, the program exits.
+"""
 def convert_print_statement(print_statement, lookup_dict, indent):
     print_statement = print_statement.strip()
     if (print_statement_err_checking(print_statement) == False):
@@ -339,6 +349,10 @@ def convert_print_statement(print_statement, lookup_dict, indent):
         python_code += " "*indent + "print(" + print_statement + ")\n"
         return python_code
 
+"""
+This function is given a variable assignment. It checks for errors in the variable
+assignment. If there are no errors, the statement is executed.
+"""
 def exec_var_assign(var_assign, lookup_dict):
     var_assign = var_assign.strip()
     if (var_assign_err_checking(var_assign) == False):
@@ -367,6 +381,11 @@ def exec_var_assign(var_assign, lookup_dict):
     lookup_dict[var_name] = result
     return None
 
+"""
+This function is given a variable assignment. It checks for errors in the variable
+assignment. If there are no errors, the statement is converted to Python code.
+If there are errors, the program exits.
+"""
 def convert_var_assign(var_assign, lookup_dict, indent):
     var_assign = var_assign.strip()
     if (var_assign_err_checking(var_assign) == False):
@@ -394,6 +413,10 @@ def convert_var_assign(var_assign, lookup_dict, indent):
     lookup_dict[var_name] = result
     return python_code
 
+"""
+This function is given a statement. It parses the statement into its components
+and returns the components. Performs error checking.
+"""
 def parse_var_assign(var_assign):
     var_assign = var_assign.strip()
     # parse the variable assignment into its components
