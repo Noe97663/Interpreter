@@ -376,6 +376,9 @@ def exec_var_assign(var_assign, lookup_dict):
         print("var_name: " + var_name)
         print("expr: " + expr)
     # evaluate the expression
+    if var_name=="true" or var_name=="false":
+        print("ERROR: Cannot use keywords true/false as variable names.")
+        return None
     result = expr_module.exec_expr(expr, lookup_dict)
     if result is None:
         return None
@@ -409,6 +412,9 @@ def convert_var_assign(var_assign, lookup_dict, indent):
         print(" "*indent + "var_name: " + var_name)
         print(" "*indent + "expr: " + expr)
         print()
+    if var_name=="true" or var_name=="false":
+        print("ERROR: Cannot use keywords true/false as variable names.")
+        sys.exit(0)
     expr_py = expr_module.convert_to_python(expr, lookup_dict)
     if expr_py is None:
         sys.exit(0)

@@ -62,6 +62,8 @@ def parse_expr_to_type(expr):
                 return None
     if type_retval=="":
         type_retval = "<val>"
+    if(DEBUG):
+        print(expr,"is being parsed as a",type_retval)
     return type_retval
 """
 helps gather left and right variables for an expression with an operator
@@ -87,6 +89,8 @@ def parse_var_to_lookup_helper(expr,ops):
                     else:
                         print("ERROR:", right,"is not a valid variable name.")
                         return None
+                if DEBUG:
+                    print("Looking up the variables in this list ->",ret_val)
                 return ret_val
 """
 parse_var_to_lookup(expr): INPUTS a single EXPR, and returns a list of variables to look up.
@@ -121,6 +125,8 @@ def parse_var_to_lookup(expr):
         #var_name
         if var_valid(expr):
             lookup.append(expr)
+            if DEBUG:
+                print("Looking up the variables in this list ->",lookup)
             return lookup
         else:
             print("ERROR:",expr,"is not a valid variable name.")
@@ -161,6 +167,8 @@ value = "xyz", type = "str"
 def operator_expr_exec(expr,lookup_dict,ops,is_comp):
     for op in ops:
         if expr.find(op)!=-1:
+            if DEBUG:
+                print("Parsing",expr,"using the",op,"operator.")
             expr = expr.split(op)
             left = expr[0].strip()
             right = expr[1].strip()
@@ -222,6 +230,16 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
             else:
                 print("ERROR: Trouble parsing "+right+ " in >>"+expr+"<<.")
                 return None
+            if DEBUG:
+                if type(left)==str:
+                    print("Determined left hand side to be -> \""+left+'"')
+                else:
+                    print("Determined left hand side to be ->",str(left))
+                print("Operator used is",op)
+                if type(right)==str:
+                    print("Determined right hand side to be -> \""+right+'"\n')
+                else:
+                    print("Determined right hand side to be ->",str(right)+"\n")
             # HERE IS WHERE MATH EXPR AND COMP EXPR PARSE BRANCHES
             # different checking if math expr
             if not(is_comp):
@@ -288,6 +306,8 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
             
 
 def exec_expr(expr,lookup_dict):
+    if(DEBUG):
+        print("\nParsing expression:",expr)
     expr = expr.strip()
     expr_type = parse_expr_to_type(expr)
     if expr_type is None:
@@ -300,15 +320,21 @@ def exec_expr(expr,lookup_dict):
         #string_literal
         if expr.find("\"")!=-1:
             if expr[0]=="\"" and expr[-1]=="\"":
+                if DEBUG:
+                    print(expr,"was found to be a string_literal.\n")
                 return Value(expr.strip("\""),"str")
             else:
                 print("ERROR: string literal not in correct format: "+expr)
                 return None
         #int
         if all(char.isdigit() for char in expr):
+            if DEBUG:
+                print(expr,"was found to be an int.\n")
             return Value(int(expr),"int")
         #bool
         if expr=="true" or expr=="false":
+            if DEBUG:
+                print(expr,"was found to be a bool.\n")
             if(expr=="true"):
                 return Value(True,"bool")
             else:
@@ -316,6 +342,8 @@ def exec_expr(expr,lookup_dict):
         #var_name
         if var_valid(expr):
             if expr in lookup_dict:
+                if DEBUG:
+                    print(expr,"was found to be a variable name.\n")
                 return lookup_dict[expr]
             else:
                 print("ERROR:",expr,"has not been defined yet.")
@@ -328,6 +356,8 @@ def exec_expr(expr,lookup_dict):
         vars = parse_var_to_lookup(expr)
         if vars is None:
             return None
+        if DEBUG:
+            print("Going to look up vars in ->",vars)
         for var in vars:
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
@@ -343,6 +373,8 @@ def exec_expr(expr,lookup_dict):
         vars = parse_var_to_lookup(expr)
         if vars is None:
             return None
+        if DEBUG:
+            print("Going to look up vars in ->",vars)
         for var in vars:
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
@@ -370,6 +402,8 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
     right_is_var =False
     for op in ops:
         if expr.find(op)!=-1:
+            if DEBUG:
+                print("Parsing",expr,"using the",op,"operator.")
             expr = expr.split(op)
             left = expr[0].strip()
             right = expr[1].strip()
@@ -435,6 +469,16 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
             else:
                 print("ERROR: Trouble parsing "+right+ " in >>"+expr+"<<.")
                 return None
+            if DEBUG:
+                if type(left)==str:
+                    print("Determined left hand side to be -> \""+left+'"')
+                else:
+                    print("Determined left hand side to be ->",str(left))
+                print("Operator used is",op)
+                if type(right)==str:
+                    print("Determined right hand side to be -> \""+right+'"\n')
+                else:
+                    print("Determined right hand side to be ->",str(right)+"\n")
             # HERE IS WHERE MATH EXPR AND COMP EXPR PARSE BRANCHES
             # different checking if math expr
             if not(is_comp):
@@ -523,14 +567,13 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     return None
 
 """
-expr.py:
 convert_to_python(expr): INPUTS an EXPR, and returns a string of python code that will evaluate the expression.
                          This is for when we run in compiler mode.
                          This is for when we run in compiler mode.
 """
 def convert_to_python(expr,lookup_dict):
     if(DEBUG):
-        print("NOEL WRITE DEBUG TEXT")
+        print("\nParsing expression:",expr)
     expr = expr.strip()
     expr_type = parse_expr_to_type(expr)
     if expr_type is None:
@@ -543,15 +586,21 @@ def convert_to_python(expr,lookup_dict):
         #string_literal
         if expr.find("\"")!=-1:
             if expr[0]=="\"" and expr[-1]=="\"":
+                if DEBUG:
+                    print(expr,"was found to be a string_literal.\n")
                 return expr
             else:
                 print("ERROR: string literal not in correct format: "+expr)
                 return None
         #int
         if all(char.isdigit() for char in expr):
+            if DEBUG:
+                print(expr,"was found to be an int.\n")
             return expr
         #bool
         if expr=="true" or expr=="false":
+            if DEBUG:
+                print(expr,"was found to be a bool.\n")
             if(expr=="true"):
                 return "True"
             else:
@@ -559,6 +608,8 @@ def convert_to_python(expr,lookup_dict):
         #var_name
         if var_valid(expr):
             if expr in lookup_dict:
+                if DEBUG:
+                    print(expr,"was found to be a variable name.\n")
                 return expr
             else:
                 print("ERROR:",expr,"has not been defined yet.")
@@ -571,18 +622,21 @@ def convert_to_python(expr,lookup_dict):
         vars = parse_var_to_lookup(expr)
         if vars is None:
             return None
+        if DEBUG:
+            print("Going to look up vars in ->",vars)
         for var in vars:
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
                 return None
         return convert_to_python_operator_expr_exec(expr,lookup_dict,["==",  "/=",  ">=", "<=", "<<", ">>"],True)
-        
-        
+
 
     elif expr_type == "<math_expr>":
         vars = parse_var_to_lookup(expr)
         if vars is None:
             return None
+        if DEBUG:
+            print("Going to look up vars in ->",vars)
         for var in vars:
             if var not in lookup_dict:
                 print("ERROR:",var,"has not been defined yet.")
