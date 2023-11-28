@@ -8,7 +8,7 @@ class Variable:
 
 """
 possibilities:
-value = "xyz", type = "str_literal" 
+value = "xyz", type = "str" 
 value = 123, type = "int" 
 value = True, type = "bool" 
 """

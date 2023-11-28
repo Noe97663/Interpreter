@@ -3,6 +3,7 @@ import os
 import sys
 import parserX
 import statement
+import expr
 import variable
 
 global DEBUG
@@ -27,12 +28,15 @@ def translate_file(filename, lookup_dict, DEBUG = False):
 
     python_code = ""    
     for arg in lookup_dict:
-        python_code += arg + " = " + str(lookup_dict[arg]) + "\n"
+        arg_type = lookup_dict[arg].type
+        if arg_type=="str":
+            python_code += arg + " = \"" + str(lookup_dict[arg].value) + "\"\n"
+        else:
+            python_code += arg + " = " + str(lookup_dict[arg].value) + "\n"
         
     for block in blocks:
         stmts = parserX.parse_block_to_statements(block)
         for stmt in stmts:
-            #NOEL
             python_code += statement.convert_to_python(stmt,lookup_dict)
     print(python_code)
     
@@ -141,6 +145,7 @@ def main():
     for i, arg in enumerate(args.args):
         # arg names are arga, argb, argc, etc.
         var_name = "arg" + chr(ord('a') + i)
+        """
         if arg.isnumeric():
             lookup_dict[var_name] = variable.Value(int(arg), "int")
         elif arg == "true":
@@ -149,6 +154,15 @@ def main():
             lookup_dict[var_name] = variable.Value(False, "bool")
         else:
             lookup_dict[var_name] = variable.Value(arg, "str")
+        """
+        arg_value = expr.exec_expr(arg,lookup_dict)
+        if arg_value is None and all(char.isalpha() for char in arg):
+            lookup_dict[var_name] = variable.Value(arg, "str")
+        elif arg_value is None:
+            print("ERROR: Invalid command line arg used.")
+            sys.exit(0)
+        else:
+            lookup_dict[var_name] = expr.exec_expr(arg,lookup_dict)
         if DEBUG:
             print("arg:", var_name, "value:", lookup_dict[var_name], "type:", lookup_dict[var_name].type)
     # Implement the logic based on the arguments

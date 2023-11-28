@@ -1,12 +1,8 @@
 {
 int x = ~3 ? 
 int y = ~3 + ~4?
-str bal = "asdas"?
 !y?
-!arga?
-int z = arga?
-!z?
-bool j = ~ && false?
+int j = ~4 && ~?
 while (x >> ~6){
     int x = x - 1? 
     !x?

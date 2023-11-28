@@ -42,7 +42,7 @@ def convert_to_python(statement, lookup_dict, indent=0):
     else:
         print("ERROR: unknown statement type")
         print("ERROR: " + statement)
-        sys.exit()
+        sys.exit(0)
 
 
 """
@@ -425,7 +425,7 @@ def convert_var_assign(var_assign, lookup_dict, indent):
     if (type_name != result.type):
         print("ERROR: variable type does not match expression type")
         print("ERROR: " + var_name + " has type " + type_name + " but expression has type " + result.type)
-        return None
+        sys.exit(0)
     lookup_dict[var_name] = result
     return python_code
 

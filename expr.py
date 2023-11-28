@@ -8,7 +8,7 @@ A <val> should not have " and a digit in it, in any circumstance
 def val_valid(val):
     #checks if only valid characters are used
     for char in val:
-        if char != '"' and not char.isalnum() and char!=" ":
+        if char != '"' and not char.isalnum() and char!=" " and char!="~":
             return False
     
     string_lit = False
@@ -61,6 +61,11 @@ def parse_expr_to_type(expr):
                 print("ERROR: both types of ops found in >>"+str(expr)+"<<")
                 return None
     if type_retval=="":
+        if "~" in expr:
+            if (expr[0]!="~") or not(expr[0]=="~" and all(char.isdigit() for char in expr[1:])):
+                print("ERROR: Incorrect syntax for negative number >>"+str(expr)+"<<")
+                return None
+
         type_retval = "<val>"
     if(DEBUG):
         print(str(expr),"is being parsed as a",str(type_retval))
@@ -117,7 +122,7 @@ def parse_var_to_lookup(expr):
                 print("ERROR: string literal not in correct format: "+str(expr))
                 return None
         #int
-        if all(char.isdigit() for char in expr):
+        if all(char.isdigit() for char in expr[1:]) and ((expr[0].isdigit()) or (expr[0]=="~" and expr[1:].strip()!="")):
             return lookup
         #bool
         if expr=="true" or expr=="false":
@@ -192,7 +197,8 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     print("ERROR: string literal not in correct format: "+str(left) +" in "+str(original_expr))
                     return None
             # left is an int
-            elif all(char.isdigit() for char in left):
+            elif all(char.isdigit() for char in left[1:]) and (left[0].isdigit() or left[0]=="~" and left[1:].strip()!=""):
+                left = left.replace("~","-")
                 left = int(left)
             # left is a bool
             elif left=="true":
@@ -223,7 +229,8 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     print("ERROR: string literal not in correct format: "+str(right) +" in "+str(original_expr))
                     return None
             # right is an int
-            elif all(char.isdigit() for char in right):
+            elif all(char.isdigit() for char in right[1:]) and ((right[0].isdigit()) or (right[0]=="~" and right[1:].strip()!="")):
+                right = right.replace("~","-")
                 right = int(right)
             # right is a bool
             elif right=="true":
@@ -337,9 +344,11 @@ def exec_expr(expr,lookup_dict):
                 print("ERROR: string literal not in correct format: "+str(expr))
                 return None
         #int
-        if all(char.isdigit() for char in expr):
+        if all(char.isdigit() for char in expr[1:]) and ((expr[0].isdigit()) or (expr[0]=="~" and expr[1:].strip()!="")):
             if DEBUG:
                 print(str(expr),"was found to be an int.\n")
+            if expr[0]=="~":
+                expr = expr.replace("~","-")
             return Value(int(expr),"int")
         #bool
         if expr=="true" or expr=="false":
@@ -439,7 +448,9 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     print("ERROR: string literal not in correct format: "+str(left) +" in "+str(original_expr))
                     return None
             # left is an int
-            elif all(char.isdigit() for char in left):
+            elif all(char.isdigit() for char in left[1:]) and ((left[0].isdigit()) or ( left[0]=="~" and left[1:].strip()!="")):
+                left = left.replace("~","-")
+                print(left)
                 left = int(left)
             # left is a bool
             elif left=="true":
@@ -472,7 +483,8 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     print("ERROR: string literal not in correct format: "+str(right) +" in "+str(original_expr))
                     return None
             # right is an int
-            elif all(char.isdigit() for char in right):
+            elif all(char.isdigit() for char in right[1:]) and ((right[0].isdigit()) or (right[0]=="~" and right[1:].strip()!="")):
+                right = right.replace("~","-")
                 right = int(right)
             # right is a bool
             elif right=="true":
@@ -613,9 +625,11 @@ def convert_to_python(expr,lookup_dict):
                 print("ERROR: string literal not in correct format: "+str(expr))
                 return None
         #int
-        if all(char.isdigit() for char in expr):
+        if all(char.isdigit() for char in expr[1:]) and ((expr[0].isdigit()) or(expr[0]=="~" and expr[1:].strip()!="")):
             if DEBUG:
                 print(str(expr),"was found to be an int.\n")
+            if expr[0]=="~":
+                expr = expr.replace("~","-")
             return expr
         #bool
         if expr=="true" or expr=="false":
