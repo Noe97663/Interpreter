@@ -52,13 +52,15 @@ usage: translator.py [-h] (-t FILENAME | -i [FILENAME]) [-d] [args ...]
 
 TRANSLATE A FILE:
 python translator.py -t FILENAME 
+python translator.py -t FILENAME > output.py (do this so save the translated code)
 
 INTERPRETOR MODE:
 python translator.py -i FILENAME(Optional)
 
 When a file name is specified for interpretor mode, the interpretor will run that file line by line.
 
-You can add a -d flag to see parsing/debug information for both MODES. Eg;
+You can add a -d flag to see parsing/debug information for both MODES. Don't do this if you want to run
+the translated code.
 python translator.py -t FILENAME -d
 python translator.py -i -d
 
