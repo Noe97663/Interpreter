@@ -48,15 +48,20 @@ Additional features:
 --Add an optional feature that explicitly shows the parsing process.
 
 How to use:
-usage: python translator.py [-h] (-t FILENAME | -i) [-d] [args ...]
+usage: translator.py [-h] (-t FILENAME | -i [FILENAME]) [-d] [args ...]
 
 TRANSLATE A FILE:
 python translator.py -t FILENAME 
 
 INTERPRETOR MODE:
-python translator.py -i
+python translator.py -i FILENAME(Optional)
 
-You can add a -d flag to see parsing/debug information for both MODES.
+When a file name is specified for interpretor mode, the interpretor will run that file line by line.
+
+You can add a -d flag to see parsing/debug information for both MODES. Eg;
+python translator.py -t FILENAME -d
+python translator.py -i -d
+
 You can add additional arguments at the end. Each argument will be stored as
 variable arga, argb, argc ...
 
