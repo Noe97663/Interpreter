@@ -4,14 +4,9 @@ from expr import *
 # TESTS for exec_expr(expr,lookup_dict)
 
 
-
-print(type("asd"))
-print(type(123))
-print(type(True))
-print(type("asd")==str)
-print(type(123)==int)
-print(type(True)==bool)
-
+x=None
+if x is None:
+    print("dab")
 
 
 

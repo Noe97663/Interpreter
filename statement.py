@@ -357,7 +357,7 @@ def convert_var_assign(var_assign, lookup_dict, indent):
     if (type_name != result.type):
         print("ERROR: variable type does not match expression type")
         return None
-    lookup_dict[var_name] = eval
+    lookup_dict[var_name] = result
     return python_code
 
 def parse_var_assign(var_assign):
