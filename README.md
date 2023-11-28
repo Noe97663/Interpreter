@@ -48,15 +48,23 @@ Additional features:
 --Add an optional feature that explicitly shows the parsing process.
 
 How to use:
-usage: python translator.py [-h] (-t FILENAME | -i) [-d] [args ...]
+usage: translator.py [-h] (-t FILENAME | -i [FILENAME]) [-d] [args ...]
 
 TRANSLATE A FILE:
 python translator.py -t FILENAME 
+python translator.py -t FILENAME > output.py (do this so save the translated code)
 
 INTERPRETOR MODE:
-python translator.py -i
+python translator.py -i FILENAME (This is the line by line interpreter)
+python translator.py -i (This is the interactive interpeter)
 
-You can add a -d flag to see parsing/debug information for both MODES.
+When a file name is specified for interpretor mode, the interpretor will run that file line by line.
+
+You can add a -d flag to see parsing/debug information for both MODES. Don't do this if you want to run
+the translated code. This is the explicit parsing additional feature.
+python translator.py -t FILENAME -d
+python translator.py -i -d
+
 You can add additional arguments at the end. Each argument will be stored as
 variable arga, argb, argc ...
 
@@ -66,3 +74,6 @@ triangle.txt
 -- the triangle inequality theorem.
 -- Calculate the perimeter.
 Example use: python3 translator.py -t example_program/triangle.txt 2 3 4
+
+Error checking:
+Running files in err_testcases provide examples of syntax and type checking.

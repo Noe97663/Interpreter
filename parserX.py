@@ -29,6 +29,7 @@ This function takes in a block and returns a list of statements.
 def parse_block_to_statements(block):
     block = block.strip()
     block = block[1:-1]
+    block = block.strip()
     retval = []
     statement = ""
     count = 0
