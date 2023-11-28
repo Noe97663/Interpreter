@@ -44,49 +44,44 @@ def translate_file(filename, lookup_dict, DEBUG = False):
 """
 This function runs the interpreter.
 """
-def run_interpreter(lookup_dict, DEBUG = False):
-    initial_input = input("Input a file name to run line by line or enter to run in interactive mode: ")
-    initial_input = initial_input.strip()
-    if initial_input == "":
-        run_interpreter_interactive(lookup_dict)
+def run_interpreter(file_name, lookup_dict, DEBUG = False):
+    if not os.path.exists(file_name):
+        print("ERROR: file '" + file_name + "' does not exist")
+        sys.exit(1)
+    input_file = open(file_name, "r")
+    input_string = input_file.read()
+    input_file.close()
+    blocks = parserX.parse_string_to_blocks(input_string)
+    if DEBUG:
+        print("Successfully opened file '" + file_name + "'")
+        print(len(blocks), "blocks found")
+    if len(blocks) > 0:
+        print("Running in line by line mode, enter to continue ...")
+        input("")
     else:
-        if not os.path.exists(initial_input):
-            print("ERROR: file '" + initial_input + "' does not exist")
-            sys.exit(1)
-        input_file = open(initial_input, "r")
-        input_string = input_file.read()
-        input_file.close()
-        blocks = parserX.parse_string_to_blocks(input_string)
+        print("No blocks found. Are you sure you've correctly formatted your file?")
+    to_run = []
+    for block in blocks:
+        stmts = parserX.parse_block_to_statements(block)
+        if stmts is not None:
+            for stmt in stmts:
+                to_run.append(stmt)
+    while len(to_run) > 0:
+        stmt = to_run.pop(0)
+        print(">>" + stmt)
+        statement.exec_statement(stmt, lookup_dict)
         if DEBUG:
-            print("Successfully opened file '" + initial_input + "'")
-            print(len(blocks), "blocks found")
-        if len(blocks) > 0:
-            print("Running in line by line mode, enter to continue ...")
-            input("")
-        else:
-            print("No blocks found. Are you sure you've correctly formatted your file?")
-        to_run = []
-        for block in blocks:
-            stmts = parserX.parse_block_to_statements(block)
-            if stmts is not None:
-                for stmt in stmts:
-                    to_run.append(stmt)
-        while len(to_run) > 0:
-            stmt = to_run.pop(0)
-            print(">>" + stmt)
-            statement.exec_statement(stmt, lookup_dict)
-            if DEBUG:
-                print()
-                print("Lookup dict:")
-                lookup_dict_str = ""
-                for key in lookup_dict:
-                    lookup_dict_str += key + ": " + str(lookup_dict[key]) + ", "
-                print(lookup_dict_str[:-2])
-            input("")
+            print()
+            print("Lookup dict:")
+            lookup_dict_str = ""
+            for key in lookup_dict:
+                lookup_dict_str += key + ": " + str(lookup_dict[key]) + ", "
+            print(lookup_dict_str[:-2])
+        input("")
 
-        print("Done executing file '" + initial_input + "'")
-        print("Transitioning to interactive mode ...")
-        run_interpreter_interactive(lookup_dict)
+    print("Done executing file '" + file_name + "'")
+    print("Transitioning to interactive mode ...")
+    run_interpreter_interactive(lookup_dict)
 
 """
 This function runs the interpreter in interactive mode.
@@ -127,7 +122,7 @@ def main():
     # Define the flags
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-t', '--translate', type=str, metavar='FILENAME', help='Translate a file to Python')
-    group.add_argument('-i', '--interpreter', action='store_true', help='Run in interpreter mode')
+    group.add_argument('-i', '--interpreter', nargs='?', const="NO_FILE", type=str, metavar='FILENAME', help='Run in interpreter mode, optionally with a file')
     parser.add_argument('-d', '--debug', action='store_true', help='Run in debug mode')
 
     # Add an argument for arbitrary number of positional arguments
@@ -164,7 +159,10 @@ def main():
     if args.translate:
         translate_file(args.translate, lookup_dict, DEBUG = args.debug)
     elif args.interpreter:
-        run_interpreter(lookup_dict, DEBUG = args.debug)
+        if args.interpreter == "NO_FILE":
+            run_interpreter_interactive(lookup_dict)
+        else:
+            run_interpreter(args.interpreter, lookup_dict, DEBUG = args.debug)
 
 if __name__ == '__main__':
     main()
