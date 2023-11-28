@@ -1,4 +1,6 @@
 x = 3
-while x > 0:
-    x = x - 1
-    print(x)
+if x == 3:
+    if x == 3:
+        y = 4
+else:
+    y = 5
