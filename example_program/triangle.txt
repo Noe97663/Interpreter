@@ -1,0 +1,28 @@
+{
+    !"Given the length of the sides of a triangle, see if it is a valid triangle."?
+    !"The sides you have given are: "?
+    !"Side 1: "?
+    !arga?
+    !"Side 2: "?
+    !argb?
+    !"Side 3: "?
+    !argc?
+}
+{
+    int argab = arga + argb?
+    int argac = arga + argc?
+    int argbc = argb + argc?
+    if (argab > argc) {
+        if (argac > argb) {
+            if (argbc > arga) {
+                !"This is a valid triangle."?
+            } else {
+                !"This is not a valid triangle."?
+            }?
+        } else {
+            !"This is not a valid triangle."?
+        }?
+    } else {
+        !"This is not a valid triangle."?
+    }?
+}
