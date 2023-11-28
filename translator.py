@@ -25,13 +25,8 @@ def translate_file(filename, lookup_dict, DEBUG = False):
         print("Successfully opened file '" + filename + "'")
         print(len(blocks), "blocks found:")
 
-    python_code = ""
-    if DEBUG:
-        if len(lookup_dict) > 0:
-            print("Command line variables passed in:")
+    python_code = ""    
     for arg in lookup_dict:
-        if DEBUG:
-            print("arg:", arg, "value:", lookup_dict[arg])
         python_code += arg + " = " + str(lookup_dict[arg]) + "\n"
         
     for block in blocks:
@@ -141,26 +136,30 @@ def main():
     # Parse the arguments
     args = parser.parse_args()
 
-    # Map positional arguments to a dictionary
-    lookup_dict = {}
-    for i, arg in enumerate(args.args):
-        if arg.isnumeric():
-            lookup_dict[f'arg{i}'] = variable.Value(arg, "int")
-        elif arg == "True":
-            lookup_dict[f'arg{i}'] = variable.Value(True, "bool")
-        elif arg == "False":
-            lookup_dict[f'arg{i}'] = variable.Value(False, "bool")
-        else:
-            lookup_dict[f'arg{i}'] = variable.Value(arg, "str_literal")
-
-
-
     DEBUG = args.debug
     statement.DEBUG = args.debug
     statement.expr_module.DEBUG = args.debug
     parserX.DEBUG = args.debug
     if DEBUG:
         print("DEBUG MODE ON")
+
+    # Map positional arguments to a dictionary
+    lookup_dict = {}
+    if len(args.args) > 0:
+        print("Additional arguments passed in:")
+    for i, arg in enumerate(args.args):
+        # arg names are arga, argb, argc, etc.
+        var_name = "arg" + chr(ord('a') + i)
+        if arg.isnumeric():
+            lookup_dict[var_name] = variable.Value(arg, "int")
+        elif arg == "True":
+            lookup_dict[var_name] = variable.Value(True, "bool")
+        elif arg == "False":
+            lookup_dict[var_name] = variable.Value(False, "bool")
+        else:
+            lookup_dict[var_name] = variable.Value(arg, "str_literal")
+        if DEBUG:
+            print("arg:", var_name, "value:", lookup_dict[var_name], "type:", lookup_dict[var_name].type)
     # Implement the logic based on the arguments
     if args.translate:
         translate_file(args.translate, lookup_dict, DEBUG = args.debug)

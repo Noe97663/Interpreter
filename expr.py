@@ -154,7 +154,7 @@ class Value:
         self.value = value
         self.type = type
 
-value = "xyz", type = "str_literal" 
+value = "xyz", type = "str" 
 <int> | <bool> | <str_literal>
 """
 
@@ -300,7 +300,7 @@ def exec_expr(expr,lookup_dict):
         #string_literal
         if expr.find("\"")!=-1:
             if expr[0]=="\"" and expr[-1]=="\"":
-                return Value(expr.strip("\""),"str_literal")
+                return Value(expr.strip("\""),"str")
             else:
                 print("ERROR: string literal not in correct format: "+expr)
                 return None
@@ -351,7 +351,7 @@ def exec_expr(expr,lookup_dict):
         if ret_val is None:
             return None
         if type(ret_val)==str:
-            return Value(ret_val,"str_literal")
+            return Value(ret_val,"str")
         elif type(ret_val)==bool:
             return Value(ret_val,"bool")
         #assuming int
