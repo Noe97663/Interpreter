@@ -1,9 +1,46 @@
 Showcases:
-    Integer Declarations and output
-    String Declarations and output
-    Bool Decalarations and output (has to be a variable or string)
-{int x = ~3? int y = 4? int z = x+y? !z?}
-{int x = 3? if (x == 3) {int y = 4?}?}
-{int x = 3? if (x == 3) {int y = 4?} else {int y = 5?}?}
+    Type annotations
+    Integer Declarations, int math expressions, and output
+    String Declarations, string math expressions, and output
+    Bool Decalarations, bool math expressions and output (has to be a variable or string)
+    Demonstration of whitespace between statements not being very relevant (like in Java)
+
+Integer block
+{
+int x = ~3?
+int y = 4?
+int one = x+y?
+int two = y-x?
+int three = x*y?
+int four = x/4?
+int five = y%2?
+!x? !y?
+!one? !two? !three? !four? !five?
+}
+
+String block
+{
+str x = "Fanum "?
+str y = "tax"?
+str one = x+y?
+str two = x+"Fanum"?
+str three = "Tax"+y?
+!x? !y?
+!one? !two? !three?
+}
+
+Boolean block, also showing how the language is flexible with whitespace
+{
+    bool x = true?
+    bool y =false?
+    bool one = x && y?
+    bool two = x || false?
+    bool three = ~ && x?
+    !x? !y?
+    !one? !two? !three?
+}
+
+Whitespace demonstration
+Horrors beyond comprehension - not using whitespace effectively
 {int x = 3? if (x == 3) {int y = 4?} else {int y = 5?}? int y = 6? int y = 7? if (x == 3) {int y = 8?} else {int y = 9?}?}
 {!x?!y?}

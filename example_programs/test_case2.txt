@@ -1,4 +1,4 @@
-Showcases:
+Showcases: NESTED WHILE LOOPS WORK POG
     
 {
 int x = ~3 ? 
@@ -10,7 +10,12 @@ int z = arga?
 !z?
 bool j = ~ && false?
 while (x >> ~6){
-    int x = x - 1? 
+    int x = x - 1?
+    int n = 0?
+    while (n >> ~6){
+        int n = n - 1? 
+        !n?
+        }?
     !x?
     }?
 }

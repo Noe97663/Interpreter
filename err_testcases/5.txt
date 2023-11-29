@@ -1,0 +1,10 @@
+String block
+{
+str x = "Fanum "?
+str y = "tax"?
+str one = x+y?
+str two = x+"Fanum"?
+int three = "Tax"+y?
+!x? !y?
+!one? !two? !three?
+}

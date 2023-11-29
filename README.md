@@ -4,7 +4,7 @@ usage: translator.py [-h] (-t FILENAME | -i [FILENAME]) [-d] [args ...]
 
 TRANSLATE A FILE:
 python translator.py -t FILENAME 
-python translator.py -t FILENAME > output.py (do this so save the translated code)
+python translator.py -t FILENAME > output.py (do this to save the translated code)
 
 INTERPRETOR MODE:
 python translator.py -i FILENAME (This is the line by line interpreter)
