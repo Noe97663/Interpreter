@@ -1,0 +1,17 @@
+{   int x = 4? int y = 7?
+    if (x<<y) {
+        !"ffailure"?
+        if (x>>y) {
+            !"we nested"?
+        }
+        else {
+        !"one more complicated else"?
+        if (x<<y) {
+            !"we hella nested"?
+            }
+        else {
+            !"one more complicated else for no reason"?
+            }?
+        }
+    }?
+}

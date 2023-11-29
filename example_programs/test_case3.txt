@@ -1,4 +1,46 @@
 Showcases:
-    
-{bool y = ~ && false? bool z = ~ && y? !y? !z?}
-{int x = 3? if (x == 3) {int y = 4?}?}
+    Comparison operations with all types.
+    comparison operators - == | /= | >= | <= | << | >>
+
+Integer block
+{
+    int x = ~3?
+    int y = 4?
+    bool one = x==y?
+    bool two = y/=x?
+    bool three = x>=y?
+    bool four = x<=4?
+    bool five = y<<1?
+    bool six = ~1>>y?
+    !x? !y?
+    !one? !two? !three? !four? !five? !six?
+}
+
+String block
+{
+    str x = "Fanum "?
+    str y = "tax"?
+    bool one = x==y?
+    bool two = y/=x?
+    bool three = x>=y?
+    bool four = x<="ASD"?
+    bool five = y<<"zxc"?
+    bool six = "zv">>y?
+    !x? !y?
+    !one? !two? !three? !four? !five? !six?
+}
+
+Boolean block
+{
+    bool x = true?
+    bool y = false?
+    bool one = x==y?
+    bool two = y/=x?
+    bool three = x>=y?
+    bool four = x<=true?
+    bool five = y<<false?
+    bool six = true>>y?
+    !x? !y?
+    !one? !two? !three? !four? !five? !six?
+}
+

@@ -36,6 +36,8 @@ def translate_file(filename, lookup_dict, DEBUG = False):
         
     for block in blocks:
         stmts = parserX.parse_block_to_statements(block)
+        if stmts is None:
+            sys.exit(0)
         for stmt in stmts:
             python_code += statement.convert_to_python(stmt,lookup_dict)
     print(python_code)
@@ -66,6 +68,8 @@ def run_interpreter(file_name, lookup_dict, DEBUG = False):
         if stmts is not None:
             for stmt in stmts:
                 to_run.append(stmt)
+        else:
+            sys.exit(0)
     while len(to_run) > 0:
         stmt = to_run.pop(0)
         print(">>" + stmt)
@@ -155,14 +159,14 @@ def main():
         else:
             lookup_dict[var_name] = variable.Value(arg, "str")
         """
-        arg_value = expr.exec_expr(arg,lookup_dict)
+        arg_value = expr.exec_expr(arg,lookup_dict,True)
         if arg_value is None and all(char.isalpha() for char in arg):
             lookup_dict[var_name] = variable.Value(arg, "str")
         elif arg_value is None:
             print("ERROR: Invalid command line arg used.")
             sys.exit(0)
         else:
-            lookup_dict[var_name] = expr.exec_expr(arg,lookup_dict)
+            lookup_dict[var_name] = expr.exec_expr(arg,lookup_dict,True)
         if DEBUG:
             print("arg:", var_name, "value:", lookup_dict[var_name], "type:", lookup_dict[var_name].type)
     # Implement the logic based on the arguments

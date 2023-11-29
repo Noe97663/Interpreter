@@ -1,3 +1,4 @@
+import sys
 """
 This file contains functions that parse the input string into blocks, statements, and types.
 """

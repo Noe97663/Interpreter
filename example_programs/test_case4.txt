@@ -1,3 +1,8 @@
 Showcases:
-    
-{int x = 3? if (x == 3) {if (x == 3) {int y = 4?}?} else {int y = 5?}?}
+    Command line arguments
+    Program must be ran with 3 (or more) command line args, they can be strings, ints, or bools
+{
+    !arga?
+    !argb?
+    !argc?
+}

@@ -61,8 +61,13 @@ def parse_expr_to_type(expr):
             if type_retval =="":
                 type_retval = "<math_expr>"
             else:
-                print("ERROR: both types of ops found in >>"+str(expr)+"<<")
-                return None
+                if "/=" in expr:
+                    type_retval = "<comp_expr>"
+                elif "/" in expr:
+                    type_retval = "<math_expr>"
+                else:
+                    print("ERROR: both types of ops found in >>"+str(expr)+"<<")
+                    return None
     #val op
     if type_retval=="":
         if "~" in expr:
@@ -318,7 +323,7 @@ exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of the form var_n
                             This is only for when we run in interpreter mode.
 
 """
-def exec_expr(expr,lookup_dict):
+def exec_expr(expr,lookup_dict,cmd_line=False):
     if(DEBUG):
         print("\nParsing expression:",str(expr))
     expr = expr.strip()
@@ -354,6 +359,9 @@ def exec_expr(expr,lookup_dict):
                 return Value(True,"bool")
             else:
                 return Value(False,"bool")
+        #cmd line args
+        if cmd_line and all(char.isalpha() for char in expr.strip()):
+            return Value(expr,"str")
         #var_name
         if var_valid(expr):
             if expr in lookup_dict:
@@ -450,7 +458,6 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
             # left is an int
             elif all(char.isdigit() for char in left[1:]) and ((left[0].isdigit()) or ( left[0]=="~" and left[1:].strip()!="")):
                 left = left.replace("~","-")
-                print(left)
                 left = int(left)
             # left is a bool
             elif left=="true":

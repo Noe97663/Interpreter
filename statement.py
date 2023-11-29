@@ -148,7 +148,7 @@ def convert_if_statement(if_statement, lookup_dict, indent):
         python_code += " "*indent + "else:\n"
         to_convert = parse_block_to_statements(else_block)
         if to_convert == None:
-            sys.exit()
+            sys.exit(0)
         for statement in to_convert:
             python_code += convert_to_python(statement,lookup_dict, indent+4)
         return python_code

@@ -6,6 +6,10 @@ TRANSLATE A FILE:
 python translator.py -t FILENAME 
 python translator.py -t FILENAME > output.py (do this to save the translated code)
 
+When using > to save the translated code to a file, if the original code has mistakes
+the error messages are saved to the file. So, make sure that before you save the code to a 
+file, you translate it normally to check for any mistakes.
+
 INTERPRETOR MODE:
 python translator.py -i FILENAME (This is the line by line interpreter)
 python translator.py -i (This is the interactive interpeter)
@@ -21,11 +25,19 @@ You can add additional arguments at the end. Each argument will be stored as
 variable arga, argb, argc ...
 
 Example programs:
+test_cases[n].txt -- n ranges from 1 to 4 and demonstrate language syntax.
 triangle.txt
 -- Given the length of three sides of a triangle, determine whether the triangle is a valid triangle using
 -- the triangle inequality theorem.
 -- Calculate the perimeter.
-Example use: python3 translator.py -t example_program/triangle.txt 2 3 4
+
+Example use (depends on local installation - python3 or python): 
+
+python3 translator.py -t example_program/triangle.txt 2 3 4
+(or)
+python translator.py -t example_program/triangle.txt 2 3 4
+
+
 
 Error checking:
 Running files in err_testcases provide examples of syntax and type checking.

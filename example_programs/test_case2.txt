@@ -1,14 +1,15 @@
-Showcases: NESTED WHILE LOOPS WORK POG
+Showcases: 
+    While loops, second one is a nested while loop
+    if and else, those after the first two are nested in varying degrees of complexity
     
 {
-int x = ~3 ? 
-int y = ~3 + ~4?
-str bal = "asdas"?
-!y?
-!arga?
-int z = arga?
-!z?
-bool j = ~ && false?
+int n = 0?
+while (n >> ~6){
+    int n = n - 1? 
+    !n?
+    }?
+
+int x = 5?
 while (x >> ~6){
     int x = x - 1?
     int n = 0?
@@ -21,7 +22,49 @@ while (x >> ~6){
 }
 {
     int x = 1?     
-int y = 2?   
-int z = x/y?
-!x?
+    int y = 2?   
+    if (x<<y) {
+        !"basic if"?
+    }?
+
+    if (x>>y) {
+        !"ffailure"?
+    }
+    else {
+        !"basic else"?
+    }?
+
+    if (x<<y) {
+        !"ffailure"?
+        if (x<<y) {
+            !"we nested"?
+        }?
+    }?
+
+    if (x>>y) {
+        !"ffailure"?
+        if (x<<y) {
+            !"we not getting here"?
+        }?
+    }
+    else {
+        !"complicated else"?
+    }?
+
+    if (x<<y) {
+        !"ffailure"?
+        if (x>>y) {
+            !"we nested"?
+        }
+        else {
+        !"one more complicated else"?
+        if (x<<y) {
+            !"we hella nested"?
+            }
+        else {
+            !"one more complicated else for no reason"?
+            }?
+        }?
+    }?
+
 }
