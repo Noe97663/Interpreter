@@ -1,4 +1,8 @@
-{int x = 3? int y = 4?}
+Showcases:
+    Integer Declarations and output
+    String Declarations and output
+    Bool Decalarations and output (has to be a variable or string)
+{int x = ~3? int y = 4? int z = x+y? !z?}
 {int x = 3? if (x == 3) {int y = 4?}?}
 {int x = 3? if (x == 3) {int y = 4?} else {int y = 5?}?}
 {int x = 3? if (x == 3) {int y = 4?} else {int y = 5?}? int y = 6? int y = 7? if (x == 3) {int y = 8?} else {int y = 9?}?}

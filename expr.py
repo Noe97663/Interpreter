@@ -8,17 +8,18 @@ A <val> should not have " and a digit in it, in any circumstance
 def val_valid(val):
     #checks if only valid characters are used
     for char in val:
+        #checks for valid characters
         if char != '"' and not char.isalnum() and char!=" " and char!="~":
             return False
     
-    string_lit = False
+    is_string = False
     is_int = False
     if val.find("\"")!=-1:
-        string_lit = True
+        is_string = True
     #int
     if any(char.isdigit() for char in val):
         is_int = True
-    if string_lit and is_int:
+    if is_string and is_int:
         return False
     return True
 
@@ -50,9 +51,11 @@ def parse_expr_to_type(expr):
     type_retval = ""
     comp_ops = ["==",  "/=",  ">=", "<=", "<<", ">>"]
     math_ops = ["+", "-", "*","/", "%","&&","||"]
+    #comparison op
     for op in comp_ops:
         if expr.find(op)!=-1:
             type_retval = "<comp_expr>"
+    #math op
     for op in math_ops:
         if expr.find(op)!=-1:
             if type_retval =="":
@@ -60,6 +63,7 @@ def parse_expr_to_type(expr):
             else:
                 print("ERROR: both types of ops found in >>"+str(expr)+"<<")
                 return None
+    #val op
     if type_retval=="":
         if "~" in expr:
             if (expr[0]!="~") or not(expr[0]=="~" and all(char.isdigit() for char in expr[1:])):
@@ -153,22 +157,8 @@ def parse_var_to_lookup(expr):
         return None
     return lookup
 """
-exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of the form var_name: value (the class value). 
-                            Return the value of that expression as a VALUE type. Perform error checking here.
-                            Check if a variable is not defined. 
-                            Check if a variable is not of the right type. Check if the types are right.
-                            This is only for when we run in interpreter mode.
-
-
-class Value:
-    def __init__(self, value, type):
-        self.value = value
-        self.type = type
-
-value = "xyz", type = "str" 
-<int> | <bool> | <str_literal>
+exec_expr(expr,lookup_dict): parse operator expresssions and returns the evaluated expression. 
 """
-
 def operator_expr_exec(expr,lookup_dict,ops,is_comp):
     original_expr = expr
     for op in ops:
@@ -320,8 +310,14 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
                     print("ERROR: Values",str(left),"and",str(right),"cannot be compared using comparison operators in",str(original_expr)+".")
                     return None
 
-            
+"""
+exec_expr(expr, lookup_dict): inputs an EXPR, and a dictionary of the form var_name: value (the class value). 
+                            Return the value of that expression as a VALUE type. Perform error checking here.
+                            Check if a variable is not defined. 
+                            Check if a variable is not of the right type. Check if the types are right.
+                            This is only for when we run in interpreter mode.
 
+"""
 def exec_expr(expr,lookup_dict):
     if(DEBUG):
         print("\nParsing expression:",str(expr))
@@ -415,7 +411,11 @@ def exec_expr(expr,lookup_dict):
         return None
 
 
-
+"""
+convert_to_python_operator_expr_exec(expr): Is a helper for the convert_to_python function that
+                                            helps to parse expresssions with operators and returns 
+                                            the correct code in python as a string.
+"""
 def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
     original_expr = expr
     left_is_var = False
