@@ -209,6 +209,8 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
             if is_var(right):
                 if var_valid(right):
                     if right in lookup_dict:
+                        right_is_var = True
+                        right_name = right
                         right = lookup_dict[right].value
                     else:
                         print("ERROR:",str(right),"has not been defined yet."+"(in "+str(original_expr)+")")
@@ -250,6 +252,8 @@ def operator_expr_exec(expr,lookup_dict,ops,is_comp):
             if not(is_comp):
                 if left=="~":
                     if type(right)!=bool:
+                        if right_is_var:
+                            right = right_name
                         print("ERROR: Cannot negate non boolean",str(right)+".")
                         return None
                 elif type(left)!=type(right):
@@ -516,6 +520,8 @@ def convert_to_python_operator_expr_exec(expr,lookup_dict,ops,is_comp):
             if not(is_comp):
                 if left=="~":
                     if type(right)!=bool:
+                        if right_is_var:
+                            right = right_name
                         print("ERROR: Cannot negate non boolean",str(right)+".")
                         return None
                 elif type(left)!=type(right):

@@ -4,7 +4,7 @@ int x = ~3 ?
 int y = ~3 + ~4?
 !y?
 bool m = ~&& true?
-!m?
+
 int j = ~4 && ~?
 while (x >> ~6){
     int x = x - 1? 
@@ -12,8 +12,10 @@ while (x >> ~6){
     }?
 }
 {
-    int x = 1?     
+str x = asd"dasda"?   
 int y = 2?   
 int z = x/y?
+str w = asd123!#awd?
+int huh = ha + ha?
 !x?
 }

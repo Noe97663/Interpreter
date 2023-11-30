@@ -3,8 +3,11 @@ Showcases errors, run in interpreter mode to see all
 str x = "Fanum "?
 str y = "tax"?
 str one = x+y?
-str two = x+"Fanum"?
+str two = x-"Fanum"?
 int three = "Tax"+y?
+bool oh = ~ && x?
+bool yikes = true * false?
+bool oof = true && Okocha?
 !x? !y?
 !one? !two? !three?
 }
