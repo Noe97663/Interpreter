@@ -42,5 +42,6 @@ Boolean block, also showing how the language is flexible with whitespace
 
 Whitespace demonstration
 Horrors beyond comprehension - not using whitespace effectively
-{int x = 3? if (x == 3) {int y = 4?} else {int y = 5?}? int y = 6? int y = 7? if (x == 3) {int y = 8?} else {int y = 9?}?}
+Note: There should be a space between a type and var name, var name and a =.
+{int x =3? if (x ==3) {int y = 4?} else {int y = 5?}? int y = 6? int y = 7? if (x == 3) {int y = 8?} else {int y = 9?}?}
 {!x?!y?}

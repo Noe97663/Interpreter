@@ -1,6 +1,7 @@
+Showcases errors, run in interpreter mode to see all
 {
     int y = 2?
-    int z = "hello"?
-    int a= True?
+    int z ="hello"?
+    int a=True?
     !a?
 }

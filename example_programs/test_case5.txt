@@ -1,8 +1,14 @@
 Showcases:
+        This sample program does not show any new language features but is here to provide more info
+        about the language and its translator.
+
         Interpreter - To see how the interpreter goes line by line while parsing a file 
         you can use the -i flag.
         (The -t flag would usually be used to translate a whole file at once.)
         example command: python translator.py -i example_programs/test_case5.txt
+        
+        Tip: You can catch more errors and see where they happen better using the -i flag
+        when translating a file.
 
         Interactive system - To use the interactive system, which uses the same syntax as the
         language, just use the -i flag without any filename. If you do use a filename, the 

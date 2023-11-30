@@ -1,4 +1,4 @@
-String block
+Showcases errors, run in interpreter mode to see all
 {
 str x = "Fanum "?
 str y = "tax"?

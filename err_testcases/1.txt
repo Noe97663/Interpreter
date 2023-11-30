@@ -1,3 +1,4 @@
+Showcases errors, run in interpreter mode to see all
 {
     int x = 4?
     int y = 5;?

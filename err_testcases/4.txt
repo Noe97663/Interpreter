@@ -1,7 +1,10 @@
+Showcases errors, run in interpreter mode to see all
 {
 int x = ~3 ? 
 int y = ~3 + ~4?
 !y?
+bool m = ~&& true?
+!m?
 int j = ~4 && ~?
 while (x >> ~6){
     int x = x - 1? 
