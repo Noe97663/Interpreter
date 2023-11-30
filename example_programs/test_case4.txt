@@ -1,6 +1,8 @@
 Showcases:
     Command line arguments
     Program must be ran with 3 (or more) command line args, they can be strings, ints, or bools
+
+    example command to run: python translator.py -t example_programs/test_case4.txt abc false ~1 
 {
     !arga?
     !argb?

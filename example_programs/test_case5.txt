@@ -1,0 +1,46 @@
+Showcases:
+        Interpreter - To see how the interpreter goes line by line while parsing a file 
+        you can use the -i flag.
+        (The -t flag would usually be used to translate a whole file at once.)
+        example command: python translator.py -i example_programs/test_case5.txt
+
+        Interactive system - To use the interactive system, which uses the same syntax as the
+        language, just use the -i flag without any filename. If you do use a filename, the 
+        interactive system will begin after that file has finished parsing.
+
+        Explicit parsing (Debug mode) - To see our debug mode that shows explicit parsing working
+        you can use the -d flag.
+        example command: python translator.py -t example_programs/test_case5.txt -d
+
+        You can also use both flags at the same time like so:
+        python translator.py -i example_programs/test_case5.txt -d
+        This gives the most easy to understand parsing experience as every line is parsed individually.
+
+        If you use do make any mistakes while writing code in our language, our explicit error handling
+        will catch it and show where you went wrong (whether you use the -i or -t flag)
+
+        Also, if you take a look at the python files used to create this translator you will notice that no
+        regex has been used.
+
+{
+int x = ~3?
+int y = 4?
+int one = x+y?
+int two = y-x?
+!x? !y?
+!one? !two?
+
+int n = 0?
+while (n >> ~6){
+    int n = n - 1? 
+    !n?
+    }?
+
+int x = 1?     
+    int y = 2?   
+    if (x<<y) {
+        !"basic if"?
+    }?
+
+bool one = x==y?
+}
