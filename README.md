@@ -49,8 +49,6 @@ reserved keywords - true, false, while, if, else
 
 If you use reserved keywords as variable names you will run into unpredictable behaviour.
 
-CSC 372 Project 2
-
 These are the basic features that the Interpreter handles: 
 
 ● integers, Strings, and booleans
